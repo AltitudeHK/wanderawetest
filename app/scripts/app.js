@@ -5,51 +5,56 @@ angular
     'ngCookies',
     'ngResource',
     'ngSanitize',
-    'ngRoute'
+    'ui.router'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/map.html',
-        controller: 'MapCtrl'
-      })
-      .when('/about', {
+  .config(function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider
+      .otherwise('/');
+
+    $stateProvider
+      .state('about', {
+        url: '/about',
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
-      .when('/gallery', {
+      .state('gallery', {
+        url: '/gallery',
         templateUrl: 'views/gallery.html',
         controller: 'GalleryCtrl'
       })
-      .when('/login', {
+      .state('login', {
+        url: '/login',
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
       })
-      .when('/map', {
+      .state('map', {
+        url: '/',
         templateUrl: 'views/map.html',
         controller: 'MapCtrl'
       })
-      .when('/navigation', {
+      .state('navigation', {
+        url: '/navigation',
         templateUrl: 'views/navigation.html',
         controller: 'NavigationCtrl'
       })
-      .when('/profile', {
+      .state('profile', {
+        url: '/profile',
         templateUrl: 'views/profile.html',
         controller: 'ProfileCtrl'
       })
-      .when('/signup', {
+      .state('signup', {
+        url: '/signup',
         templateUrl: 'views/signup.html',
         controller: 'SignupCtrl'
       })
-      .when('/singlephoto', {
+      .state('singlephoto', {
+        url: '/singlephoto',
         templateUrl: 'views/singlephoto.html',
         controller: 'SinglephotoCtrl'
       })
-      .when('/upload', {
+      .state('upload', {
+        url: '/upload',
         templateUrl: 'views/upload.html',
         controller: 'UploadCtrl'
-      })
-      .otherwise({
-        redirectTo: '/'
       });
   });
