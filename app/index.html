@@ -24,6 +24,8 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
+    <div ui-view></div>
+    
     <div class="header">
       <ul class="nav nav-pills pull-right">
         <li><a ng-href="#/gallery">Discover</a></li>
@@ -69,6 +71,7 @@
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/map.js"></script>
