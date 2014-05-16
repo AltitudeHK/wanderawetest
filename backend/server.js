@@ -16,6 +16,8 @@ app.configure(function() {
   //   secret: ''
   // }));
 
+  app.post('/upload', handler.upload);
+
   app.listen(8080);
   console.log('Listening on port 8080');
 });
