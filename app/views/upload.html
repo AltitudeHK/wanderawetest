@@ -1,11 +1,48 @@
-<form ng-submit="save()">
-  <label>Title</label><input type="text" ng-model="title"><br>
-  <label>Country</label><input type="text" ng-model="country"><br>
-  <label>Month</label><input type="text" ng-model="month"><br>
-  <label>Year</label><input type="text" ng-model="year"><br>
-  <label>Description</label><textarea rows="2" cols="50" ng-model="description"></textarea><br>
+<!-- http://scotch.io/tutorials/javascript/angularjs-form-validation -->
 
-  <!-- <input type="file" ng-file-select="onFileSelect($files)"> -->
-  <input type="submit">
-  <!-- <button ng-click="upload.abort()">Cancel Upload</button> -->
+<form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate> <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+
+    <!-- Title -->
+    <div class="form-group" ng-class="{ 'has-error': userForm.title.$invalid && !userForm.title.$pristine }">
+      <label>Title</label>
+      <input type="text" name="title" class="form-control" ng-model="photoInfo.title" required>
+      <p ng-show="userForm.title.$invalid && !userForm.title.$pristine" class="help-block">Please provide a title for this photo.</p>
+    </div>
+
+    <!-- Country -->
+    <div class="form-group" ng-class="{ 'has-error': userForm.country.$invalid && !userForm.country.$pristine }">
+      <label>Country</label>
+      <input type="text" name="country" class="form-control" ng-model="photoInfo.country" required>
+      <p ng-show="userForm.country.$invalid && !userForm.country.$pristine" class="help-block">Please enter the country where this photo was taken.</p>
+    </div>
+    
+    <!-- Month -->
+    <div class="form-group" ng-class="{ 'has-error': userForm.month.$invalid && !userForm.month.$pristine }">
+      <label>Month</label>
+      <select ng-model="photoInfo.month" ng-options="month for month in months" required></select>
+      <p ng-show="userForm.month.$invalid && !userForm.month.$pristine" class="help-block">Please provide the month this photo was taken.</p>
+    </div>
+
+    <!-- Year -->
+    <div class="form-group" ng-class="{ 'has-error': userForm.year.$invalid && !userForm.year.$pristine }">
+      <label>Year</label>
+      <select ng-model="photoInfo.year" ng-options="year for year in years" required></select>
+      <p ng-show="userForm.year.$invalid && !userForm.year.$pristine" class="help-block">Please provide the year this photo was taken.</p>
+    </div>    
+
+    <!-- Description -->
+    <div class="form-group" ng-class="{ 'has-error': userForm.description.$invalid && !userForm.description.$pristine }">
+      <label>Description</label>
+      <textarea name="description" class="form-control" ng-model="photoInfo.description" ng-maxlength="140" required></textarea>
+      <p ng-show="userForm.description.$invalid && !userForm.description.$pristine" class="help-block">Please provide a brief (< 140 characteres) description for this photo.</p>
+    </div>
+
+    <!-- Image selection -->
+    <div class="form-group">
+      <label>Choose Photo</label>
+      <input type="file" ng-file-select="onFileSelect($files)">
+    </div>
+    
+    <!-- Submit -->
+    <button type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid">Submit</button>
 </form>
