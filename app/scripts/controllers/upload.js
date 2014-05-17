@@ -4,21 +4,19 @@ angular.module('wanderaweApp')
   .controller('UploadCtrl', ['$scope', '$upload', '$http', function ($scope, $upload, $http) {
     $scope.photoInfo = {};
 
-    $scope.save = function () {
-      $scope.photoInfo = {
-        title: $scope.title,
-        country: $scope.country,
-        month: $scope.month,
-        year: $scope.year,
-        description: $scope.description
-      };
-      
-      $http
-        .post('/upload', $scope.photoInfo)
-        .success(function (res) {
-          console.log('Sent successfully');
-        });
+    $scope.submitForm = function (isValid) {
+      if (isValid) {
+        $http
+          .post('/upload', $scope.photoInfo)
+          .success(function (res) {
+            console.log('Sent successfully', res);
+            console.log($scope.photoInfo);
+            // reset photoInfo
+            $scope.photoInfo = {};
+          });
+      }
     };
+
     // $scope.onFileSelect = function($files) {
     //   //$files: an array of files selected, each file has name, size, and type.
     //   for (var i = 0; i < $files.length; i += 1) {
