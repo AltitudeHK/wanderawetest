@@ -48,31 +48,37 @@ angular.module('wanderaweApp')
             // reset photoInfo (eventually redirect to full screen page with specific photoId)
             // $scope.photoInfo = {};
           });
+        // $scope.upload();
       }
     };
 
-    // $scope.onFileSelect = function($files) {
-    //   //$files: an array of files selected, each file has name, size, and type.
-    //   for (var i = 0; i < $files.length; i += 1) {
-    //     var file = $files[i];
-    //     $scope.upload = $upload.upload({
-    //       url: '/upload', //upload.php script, node.js route, or servlet url
-    //       method: 'POST',
-    //       // headers: {'header-key': 'header-value'},
-    //       // withCredentials: true,
-    //       data: { myObj: $scope.myModelObj },
-    //       file: file, // or list of files: $files for html5 only
-    //       //set the file formData name ('Content-Desposition'). Default is 'file' 
-    //       //fileFormDataName: myFile, //or a list of names for multiple files (html5).
-    //       /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
-    //       //formDataAppender: function(formData, key, val){}
-    //     })
-    //     .success(function(data, status, headers, config) {
-    //       console.log(data);
-    //     });
-    //     //.error(...)
-    //     //.then(success, error, progress); 
-    //     //.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
-    //   }
-    // };
+    $scope.onFileSelect = function($files) {
+      //$files: an array of files selected, each file has name, size, and type.
+      for (var i = 0; i < $files.length; i += 1) {
+        var file = $files[i];
+        $scope.photoInfo.file = file;
+
+        // $scope.upload = $upload.upload({
+        //   url: '/upload',
+        //   method: 'POST',
+        //   // headers: {'header-key': 'header-value'},
+        //   // withCredentials: true,
+        //   data: $scope.photoInfo,
+        //   // data: { myObj: $scope.myModelObj },
+        //   file: file, // or list of files: $files for html5 only
+        //   //set the file formData name ('Content-Desposition'). Default is 'file' 
+        //   //fileFormDataName: myFile, //or a list of names for multiple files (html5).
+        //   /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
+        //   //formDataAppender: function(formData, key, val){}
+        // })
+        // .success(function(data, status, headers, config) {
+        //   console.log(data);
+        // });
+
+        // console.log($scope.upload);
+        //.error(...)
+        //.then(success, error, progress); 
+        //.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
+      }
+    };
   }]);
