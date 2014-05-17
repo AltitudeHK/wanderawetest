@@ -3,25 +3,41 @@
 angular.module('wanderaweApp')
   .controller('UploadCtrl', ['$scope', '$upload', '$http', function ($scope, $upload, $http) {
     $scope.photoInfo = {};
-    
+
     $scope.months = [
-      { month: 'January' },
-      { month: 'February' },
-      { month: 'March' },
-      { month: 'April' },
-      { month: 'May' },
-      { month: 'June' },
-      { month: 'July' },
-      { month: 'August' },
-      { month: 'September' },
-      { month: 'October' },
-      { month: 'November' },
-      { month: 'December' },
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+
+    $scope.years = [
+      '2014',
+      '2013',
+      '2012',
+      '2011',
+      '2010',
+      '2009',
+      '2008',
+      '2007',
+      '2006',
+      '2005',
+      '2004',
+      '2003',
+      '2002',
+      '2001',
+      '2000'
     ];
 
     $scope.submitForm = function (isValid) {
-      $scope.photoInfo.month = $scope.month.month;
-      console.log($scope.photoInfo.month);
       if (isValid) {
         $http
           .post('/upload', $scope.photoInfo)
@@ -30,7 +46,7 @@ angular.module('wanderaweApp')
             console.log($scope.photoInfo);
 
             // reset photoInfo (eventually redirect to full screen page with specific photoId)
-            $scope.photoInfo = {};
+            // $scope.photoInfo = {};
           });
       }
     };
@@ -59,5 +75,4 @@ angular.module('wanderaweApp')
     //     //.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
     //   }
     // };
-
   }]);

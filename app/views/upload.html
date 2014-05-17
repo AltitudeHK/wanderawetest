@@ -19,15 +19,14 @@
     <!-- Month -->
     <div class="form-group" ng-class="{ 'has-error': userForm.month.$invalid && !userForm.month.$pristine }">
       <label>Month</label>
-      <select ng-model="month" ng-options="obj.month for obj in months" required></select>
-      <!-- <input type="text" name="month" class="form-control" ng-model="photoInfo.month" required> -->
+      <select ng-model="photoInfo.month" ng-options="month for month in months" required></select>
       <p ng-show="userForm.month.$invalid && !userForm.month.$pristine" class="help-block">Please provide the month this photo was taken.</p>
     </div>
 
     <!-- Year -->
     <div class="form-group" ng-class="{ 'has-error': userForm.year.$invalid && !userForm.year.$pristine }">
       <label>Year</label>
-      <input type="text" name="year" class="form-control" ng-model="photoInfo.year" required>
+      <select ng-model="photoInfo.year" ng-options="year for year in years" required></select>
       <p ng-show="userForm.year.$invalid && !userForm.year.$pristine" class="help-block">Please provide the year this photo was taken.</p>
     </div>    
 
