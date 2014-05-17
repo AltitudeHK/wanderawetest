@@ -21,7 +21,7 @@ exports.upload = function(req, res){
 	var title       = req.body.title,
 		author      = req.body.author,
 		country    	= req.body.country,
-		time       	= req.body.time,
+		month       = req.body.month,
 		year        = req.body.year,
 		description = req.body.description,
 		people 		= req.body.people,
@@ -32,7 +32,8 @@ exports.upload = function(req, res){
 		author         : author,
 		title          : title,
 		country	       : country,
-		time           : time,
+		month          : month,
+		year		   : year,
 		description    : description,
 		people		   : people,
 		nature         : nature,
@@ -51,7 +52,12 @@ exports.upload = function(req, res){
 		res.send(200, photoId)
 	})
 		// save the file into '__dir/public/photos/' + photoId
-
+	fs.writeFile('/public/photos' + photoId, 'abc', function (err,data) {
+	  if (err) {
+	    return console.log(err);
+	  }
+	  console.log(data);
+	});
 }
 
 exports.getPhotos = function(req, res){
