@@ -49,15 +49,16 @@ exports.upload = function(req, res){
 		if(err) throw err;
 		var photoId = insertedPhotoInfo[0]._id;
 
+		fs.writeFile('/public/photos/' + photoId, 'abc', function (err,data) {
+		  if (err) {
+		    return console.log('error: ', err);
+		  }
+		  console.log(data);
+		});
+
 		res.send(200, photoId)
 	})
 		// save the file into '__dir/public/photos/' + photoId
-	fs.writeFile('/public/photos' + photoId, 'abc', function (err,data) {
-	  if (err) {
-	    return console.log(err);
-	  }
-	  console.log(data);
-	});
 }
 
 exports.getPhotos = function(req, res){
