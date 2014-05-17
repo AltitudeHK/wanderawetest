@@ -1,3 +1,5 @@
+<!-- http://scotch.io/tutorials/javascript/angularjs-form-validation -->
+
 <form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate> <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
 
     <!-- Title -->
@@ -17,7 +19,8 @@
     <!-- Month -->
     <div class="form-group" ng-class="{ 'has-error': userForm.month.$invalid && !userForm.month.$pristine }">
       <label>Month</label>
-      <input type="text" name="month" class="form-control" ng-model="photoInfo.month" required>
+      <select ng-model="month" ng-options="obj.month for obj in months" required></select>
+      <!-- <input type="text" name="month" class="form-control" ng-model="photoInfo.month" required> -->
       <p ng-show="userForm.month.$invalid && !userForm.month.$pristine" class="help-block">Please provide the month this photo was taken.</p>
     </div>
 

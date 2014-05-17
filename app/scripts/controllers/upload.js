@@ -3,15 +3,33 @@
 angular.module('wanderaweApp')
   .controller('UploadCtrl', ['$scope', '$upload', '$http', function ($scope, $upload, $http) {
     $scope.photoInfo = {};
+    
+    $scope.months = [
+      { month: 'January' },
+      { month: 'February' },
+      { month: 'March' },
+      { month: 'April' },
+      { month: 'May' },
+      { month: 'June' },
+      { month: 'July' },
+      { month: 'August' },
+      { month: 'September' },
+      { month: 'October' },
+      { month: 'November' },
+      { month: 'December' },
+    ];
 
     $scope.submitForm = function (isValid) {
+      $scope.photoInfo.month = $scope.month.month;
+      console.log($scope.photoInfo.month);
       if (isValid) {
         $http
           .post('/upload', $scope.photoInfo)
           .success(function (res) {
             console.log('Sent successfully', res);
             console.log($scope.photoInfo);
-            // reset photoInfo
+
+            // reset photoInfo (eventually redirect to full screen page with specific photoId)
             $scope.photoInfo = {};
           });
       }
