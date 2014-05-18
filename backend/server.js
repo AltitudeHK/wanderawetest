@@ -1,3 +1,5 @@
+'use strict';
+
 var express  = require('express'),
     path     = require('path'),
     handler  = require ('./requestHandler.js'),
@@ -5,9 +7,8 @@ var express  = require('express'),
     cors     = require('cors'),
     passport = require('passport');
 
-
 app.configure(function() {
-  app.use(express.bodyParser());
+  app.use(express.bodyParser({ uploadDir: './uploads' }));
   app.use(cors());
   app.use(express.static(path.join(__dirname, '../app')));
 
@@ -18,10 +19,8 @@ app.configure(function() {
 
   app.post('/upload', handler.upload);
   app.post('/getPhotos', handler.getPhotos);
-  app.post('/getOnePhoto', handler.getOnePhoto)
-
+  app.post('/getOnePhoto', handler.getOnePhoto);
 
   app.listen(8080);
   console.log('Listening on port 8080');
 });
-
