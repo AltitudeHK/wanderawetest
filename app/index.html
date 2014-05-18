@@ -25,15 +25,12 @@
 
     <!-- Add your site or application content here -->
     <div class="header" ng-controller="NavigationCtrl">
+      <ng-include src="isSignedIn ? 'views/signed_in.html' : 'views/not_signed_in.html'"></ng-include>
       <ul class="nav nav-pills pull-right">
         <li><a ui-sref="gallery" ng-click="isDiscover()">Discover</a></li>
         <li><a ui-sref="gallery">Nature</a></li>
         <li><a ui-sref="gallery">Culture</a></li>
         <li><a ui-sref="gallery">People</a></li>
-        <li><a ui-sref="signup">Signup</a></li>
-        <li><a ui-sref="login">Login</a></li>
-        <li><a ui-sref="profile">Profile</a></li>
-        <li><a ui-sref="upload">Upload</a></li>
       </ul>
       <h3 class="text-muted"><a ui-sref="map">wanderawe</a></h3>
     </div> <!-- header -->
