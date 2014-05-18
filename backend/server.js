@@ -16,7 +16,8 @@ app.configure(function() {
   // app.use(express.cookieSession({
   //   secret: ''
   // }));
-
+  app.post('/login', handler.login);
+  app.post('/signup', handler.signup);
   app.post('/upload', handler.upload);
   app.post('/getPhotos', handler.getPhotos);
   app.post('/getOnePhoto', handler.getOnePhoto);

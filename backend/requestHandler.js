@@ -6,13 +6,17 @@ var express       = require('express'),
     path          = require('path'),
     querystring   = require('querystring'),
     request       = require('request'),
-    url           = require('url');
+    url           = require('url'),
+    __directory 	= path.join(__dirname, '../photos');
+
 
 var MongoClient = require('mongodb').MongoClient,
     Server      = require('mongodb').Server,
     ObjectId    = require('mongodb').ObjectID,
     mongoclient = new MongoClient(new Server('localhost', 27017)),
     db          = mongoclient.db('wanderawe');
+
+
 
 var headers = {
 
@@ -74,13 +78,9 @@ exports.login = function(req, res){
     });
 };
 
-
-
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////UPLOAD//////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
-
 
 exports.upload = function(req, res) {
 
@@ -92,26 +92,28 @@ exports.upload = function(req, res) {
 			description = req.body.description,
 			people 			= req.body.people,
 			nature 			= req.body.nature,
-			culture 		= req.body.culture;
+			culture 		= req.body.culture,
+			file 				= req.files.file,
+			fileType    = file.type.slice(6);
 
 	var photoInfo = {
-		author         : author,
-		title          : title,
-		country	       : country,
-		month          : month,
-		year		   		 : year,
-		description    : description,
-		people		     : people,
-		nature         : nature,
-		culture        : culture,
-		likes          : 0,
-		likedUser      : []
+			author         : author,
+			title          : title,
+			country	       : country,
+			month          : month,
+			year		   		 : year,
+			description    : description,
+			people		     : people,
+			nature         : nature,
+			culture        : culture,
+			likes          : 0,
+			likedUser      : [],
+			fileType       : fileType
 	};
 
   db.collection('photo').insert(photoInfo, function(err, insertedPhotoInfo){
     if(err) throw err;
     var photoId = insertedPhotoInfo[0]._id;
-    var __directory = path.join(__dirname, '../photos');
 
     //create directory if it does not exist already
     fs.exists(__directory, function(exists){
@@ -123,53 +125,48 @@ exports.upload = function(req, res) {
     })
 
     //create the file with the unique id created by mongo as its name
-   
 		// http://www.hacksparrow.com/handle-file-uploads-in-express-node-js.html 
 		// get the temporary location of the file
-		var tmpPath = req.files.file.path;
-		var type = req.files.file.type.slice(6);
+		var tmpPath = file.path;
 		// set where the file should actually exists - in this case it is in the "images" directory
 		// var targetPath = './uploads/' + req.files.file.name;
 		// move the file from the temporary location to the intended location
-    fs.rename(tmpPath, __directory + '/' + photoId + '.' + type, function(err){
+    fs.rename(tmpPath, __directory + '/' + photoId + '.' + fileType, function(err){
       if(err) throw err;
       // var reader = new FileReader();
 		  // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
 		  fs.unlink(tmpPath, function() {
 		    if (err) throw err;
-		      res.send('File uploaded to: ' + __directory + '/' + photoId + ' - ' + req.files.file.size + ' bytes');
+		      res.send('File uploaded to: ' + __directory + '/' + photoId + ' - ' + file.size + ' bytes');
 	    });
     });
   })
 };
 
-// 	db.collection('photo').insert(photoInfo, function(err, insertedPhotoInfo){
-// 		if(err) throw err;
-// 		var photoId = insertedPhotoInfo[0]._id;
 
-// 		fs.writeFile('/public/photos/' + photoId, 'abc', function (err,data) {
-// 		  if (err) {
-// 		    return console.log('error: ', err);
-// 		  }
-// 		  console.log(data);
-// 		});
-
-// 		res.send(200, photoId)
-// 	})
-// 		// save the file into '__dir/public/photos/' + photoId
-// }
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////Retrieve Photos//////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 
 exports.getPhotos = function(req, res){
-	console.log('finding by', req.body);
-
+	
 	var category = req.body.category;
 
 	db.collection('photo').find(category).toArray(function(err, foundPhotos){
 		if(err) throw err;
-		console.log('found!', foundPhotos);
+
+		var urls = [];
+
+		for (var i = 0; i < foundPhotos.length; i++) {
+			var currentPhoto = foundPhotos[i];
+			var photoUrl = __directory + '/' + currentPhoto._id + '.' + fileType;
+			console.log(photoUrl)
+			url.push(photoUrl);
+		};
+		console.log('found!', urls)
 	});
 
-	res.send(200);
+	res.send(200, urls);
 
 };
 
