@@ -24,9 +24,9 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="header">
+    <div class="header" ng-controller="NavigationCtrl">
       <ul class="nav nav-pills pull-right">
-        <li><a ui-sref="gallery">Discover</a></li>
+        <li><a ui-sref="gallery" ng-click="isDiscover()">Discover</a></li>
         <li><a ui-sref="gallery">Nature</a></li>
         <li><a ui-sref="gallery">Culture</a></li>
         <li><a ui-sref="gallery">People</a></li>
@@ -90,6 +90,7 @@
         <script src="scripts/controllers/signup.js"></script>
         <script src="scripts/controllers/login.js"></script>
         <script src="scripts/controllers/upload.js"></script>
+        <script src="scripts/services/photo.js"></script>
         <!-- endbuild -->
 </body>
 </html>
