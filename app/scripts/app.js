@@ -49,7 +49,7 @@ angular
         controller: 'SignupCtrl'
       })
       .state('singlephoto', {
-        url: '/singlephoto',
+        url: '/singlephoto/:photoId/:fileType',
         templateUrl: 'views/singlephoto.html',
         controller: 'SinglephotoCtrl'
       })

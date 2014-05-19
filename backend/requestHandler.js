@@ -121,7 +121,7 @@ exports.upload = function(req, res) {
           if(err) throw err;
         });
       }
-    })
+    });
 
     //create the file with the unique id created by mongo as its name
 		// http://www.hacksparrow.com/handle-file-uploads-in-express-node-js.html 
@@ -136,10 +136,11 @@ exports.upload = function(req, res) {
 		  // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
 		  fs.unlink(tmpPath, function() {
 		    if (err) throw err;
-		      res.send('File uploaded to: ' + __directory + '/' + photoId + '.' + fileType + ' - ' + file.size + ' bytes');
+        // console.log("fileType", fileType);
+		    res.send({'photoId': photoId, 'fileType': fileType});
 	    });
     });
-  })
+  });
 };
 
 
@@ -159,11 +160,11 @@ exports.getPhotos = function(req, res){
 
 		for (var i = 0; i < foundPhotos.length; i++) {
 			var currentPhoto = foundPhotos[i];
-			var photoUrl = __directory + '/' + currentPhoto._id + '.' + currentPhoto.fileType;
-			console.log(photoUrl)
+			var photoUrl = currentPhoto._id + '.' + currentPhoto.fileType;
+			console.log(photoUrl);
 			urls.push(photoUrl);
-		};
-		console.log('found!', urls)
+		}
+		console.log('found!', urls);
 	  res.send(200, urls);
   });
 };
@@ -174,9 +175,9 @@ exports.getOnePhoto = function(req, res){
 
   db.collection('photos').findOne(query, function(err, photo){
     if(err) throw err;
-    var photoUrl = _directory + '/' + photo
+    var photoUrl = _directory + '/' + photo;
     res.send(200, photo);
-  })
+  });
 	// db.collection('photos').findOne({_id: photoID}, function(err, photoFound){
 	// 	//retrieve the actual photo from __dir/public.phots
 	// }

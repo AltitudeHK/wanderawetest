@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .controller('UploadCtrl', ['$scope', '$upload', '$http', function ($scope, $upload, $http) {
+  .controller('UploadCtrl', ['$scope', '$upload', '$http', '$state', function ($scope, $upload, $http, $state) {
     $scope.photoInfo = {};
 
     $scope.months = [
@@ -51,6 +51,7 @@ angular.module('wanderaweApp')
           .success(function(data, status, headers, config) {
             // file is uploaded successfully
             console.log(data);
+            $state.go('singlephoto', data);
           });
       }
     };
