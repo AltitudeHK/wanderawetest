@@ -148,25 +148,24 @@ exports.upload = function(req, res) {
 /////////////////////////////////////////////////////////////////////////
 
 exports.getPhotos = function(req, res){
-	
+	console.log(req.body);
 	var category = req.body.category;
 
 	db.collection('photos').find(category).toArray(function(err, foundPhotos){
+    console.log(foundPhotos);
 		if(err) throw err;
 
 		var urls = [];
 
 		for (var i = 0; i < foundPhotos.length; i++) {
 			var currentPhoto = foundPhotos[i];
-			var photoUrl = __directory + '/' + currentPhoto._id + '.' + fileType;
+			var photoUrl = __directory + '/' + currentPhoto._id + '.' + currentPhoto.fileType;
 			console.log(photoUrl)
-			url.push(photoUrl);
+			urls.push(photoUrl);
 		};
 		console.log('found!', urls)
-	});
-
-	res.send(200, urls);
-
+	  res.send(200, urls);
+  });
 };
 
 exports.getOnePhoto = function(req, res){

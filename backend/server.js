@@ -8,7 +8,7 @@ var express  = require('express'),
     passport = require('passport');
 
 app.configure(function() {
-  app.use(express.bodyParser({ uploadDir: '../photos' }));
+  app.use(express.bodyParser({ uploadDir: '../app/photos' }));
   app.use(cors());
   app.use(express.static(path.join(__dirname, '../app')));
 
