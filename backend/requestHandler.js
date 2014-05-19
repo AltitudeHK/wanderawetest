@@ -94,24 +94,23 @@ exports.upload = function(req, res) {
 			nature 			= req.body.nature,
 			culture 		= req.body.culture,
 			file 				= req.files.file,
-			fileType    = file.type.slice(6);
+			fileType    = file.type.slice(6),
+	    photoInfo   = {
+  			author         : author,
+  			title          : title,
+  			country	       : country,
+  			month          : month,
+  			year		   		 : year,
+  			description    : description,
+  			people		     : people,
+  			nature         : nature,
+  			culture        : culture,
+  			likes          : 0,
+  			likedUser      : [],
+  			fileType       : fileType
+	    };
 
-	var photoInfo = {
-			author         : author,
-			title          : title,
-			country	       : country,
-			month          : month,
-			year		   		 : year,
-			description    : description,
-			people		     : people,
-			nature         : nature,
-			culture        : culture,
-			likes          : 0,
-			likedUser      : [],
-			fileType       : fileType
-	};
-
-  db.collection('photo').insert(photoInfo, function(err, insertedPhotoInfo){
+  db.collection('photos').insert(photoInfo, function(err, insertedPhotoInfo){
     if(err) throw err;
     var photoId = insertedPhotoInfo[0]._id;
 
@@ -145,14 +144,14 @@ exports.upload = function(req, res) {
 
 
 /////////////////////////////////////////////////////////////////////////
-/////////////////////////////Retrieve Photos//////////////////////////////////////
+/////////////////////////////Photos//////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
 exports.getPhotos = function(req, res){
 	
 	var category = req.body.category;
 
-	db.collection('photo').find(category).toArray(function(err, foundPhotos){
+	db.collection('photos').find(category).toArray(function(err, foundPhotos){
 		if(err) throw err;
 
 		var urls = [];
@@ -172,11 +171,31 @@ exports.getPhotos = function(req, res){
 
 exports.getOnePhoto = function(req, res){
 	var photoId = req.body.photoId;
+  var query = {_id: new ObjectId(photoId)};
+
+  db.collection('photos').findOne(query, function(err, photo){
+    if(err) throw err;
+    var photoUrl = _directory + '/' + photo
+    res.send(200, photo);
+  })
 	// db.collection('photos').findOne({_id: photoID}, function(err, photoFound){
 	// 	//retrieve the actual photo from __dir/public.phots
 	// }
-
 };
+
+exports.voteUp = function(req, res) {
+  var photoId = req.body.photoId;
+  var query = {_id: new ObjectId(photoId)};
+  var update = {
+    $inc: { vote : 1 }
+  };
+
+  db.collection('posts').update(query, update, function(err, dontcare){
+      if(err) throw err;
+      console.log('callback after incrementing vote by 1 : ', dontcare);
+  });
+};
+
 
 mongoclient.open(function (error, mongoclient) {
 	if (error) throw error;
