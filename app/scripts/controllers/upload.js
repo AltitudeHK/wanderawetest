@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .controller('UploadCtrl', ['$scope', '$upload', '$http', function ($scope, $upload, $http) {
+  .controller('UploadCtrl', ['$scope', 'Photo', function ($scope, Photo) {
     $scope.photoInfo = {};
 
     $scope.months = [
@@ -39,19 +39,7 @@ angular.module('wanderaweApp')
 
     $scope.submitForm = function (isValid) {
       if (isValid) {
-        $upload
-          .upload({
-            url: 'upload',
-            data: $scope.photoInfo,
-            file: $scope.file
-          })
-          .progress(function(evt) {
-            // console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-          })
-          .success(function(data, status, headers, config) {
-            // file is uploaded successfully
-            console.log(data);
-          });
+        Photo.uploadPhoto($scope.photoInfo, $scope.file);
       }
     };
 
