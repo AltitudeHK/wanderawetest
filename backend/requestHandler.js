@@ -7,7 +7,7 @@ var express       = require('express'),
     querystring   = require('querystring'),
     request       = require('request'),
     url           = require('url'),
-    __directory 	= path.join(__dirname, '../photos');
+    __directory 	= path.join(__dirname, '../app/photos');
 
 
 var MongoClient = require('mongodb').MongoClient,
