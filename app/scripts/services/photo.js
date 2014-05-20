@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .service('Photo', ['$http', '$upload', '$state', function Photo($http, $upload, $state) {
+  .service('Photo', ['$http', '$upload', '$state', 'window', function Photo($http, $upload, $state, window) {
     var lastUploadedFileType; // string
 
     this.uploadPhoto = function (photoInfo, file) {
