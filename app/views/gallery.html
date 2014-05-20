@@ -1,5 +1,5 @@
 <div class="gallery">
   <div class="container col-md-3" ng-if="pictures.length" ng-repeat="picture in pictures">
-    <img width="100%" src="photos/{{ picture }}" />
+    <img width="100%" height="{{ setHeight(picture) }}" src="photos/{{ picture.name }}" />
   </div>
 </div>
