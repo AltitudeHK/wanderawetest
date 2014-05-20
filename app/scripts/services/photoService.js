@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .service('Photo', ['$http', '$upload', '$state', 'window', function Photo($http, $upload, $state, window) {
+  .service('Photo', ['$http', '$upload', '$state', function Photo($http, $upload, $state) {
     var lastUploadedFileType; // string
     var gridHeight = 300; // pixels
 
