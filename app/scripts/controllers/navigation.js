@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .controller('NavigationCtrl', ['$scope', '$http', function ($scope, $http) {
+  .controller('NavigationCtrl', ['$scope', 'Photo', function ($scope, Photo) {
     $scope.navigationInfo = {};
+    $scope.isSignedIn = true; // this should be false but leave true for now
 
     $scope.resetNavigationInfo = function () {
       $scope.navigationInfo = {};
@@ -16,10 +17,6 @@ angular.module('wanderaweApp')
       };
 
       console.log($scope.navigationInfo);
-      $http
-        .post('/getPhotos', $scope.navigationInfo)
-        .success(function (res) {
-          console.log(res);
-        });
+      Photo.retrieveAllPhotos($scope.navigationInfo);
     };
   }]);
