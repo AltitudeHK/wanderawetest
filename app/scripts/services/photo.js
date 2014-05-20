@@ -2,6 +2,8 @@
 
 angular.module('wanderaweApp')
   .service('Photo', ['$http', '$upload', '$state', function Photo($http, $upload, $state) {
+    var lastUploadedFileType; // string
+
     this.uploadPhoto = function (photoInfo, file) {
       $upload
         .upload({
@@ -15,7 +17,12 @@ angular.module('wanderaweApp')
         .success(function(res) {
           console.log('upload photo successfully');
           $state.go('singlephoto', res);
+          lastUploadedFileType = res.fileType;
         });
+    };
+
+    this.getLastUploadedFileType = function () {
+      return lastUploadedFileType;
     };
 
     this.retrieveOnePhoto = function (photoId) {
