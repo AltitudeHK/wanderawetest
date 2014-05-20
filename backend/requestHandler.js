@@ -116,6 +116,9 @@ exports.upload = function(req, res) {
 	var photoInfo = req.body,
       file      = req.files.file,
       fileType  = file.type.slice(6);
+
+  //attaching the fileType to photoInfo because fileType is part of req.files, not part of req.body
+  photoInfo.fileType = fileType;
 	
   console.log('photoInfo in req is, ', photoInfo);
 
@@ -164,13 +167,14 @@ exports.getPhotos = function(req, res){
 	console.log(req.body);
 	var category = req.body.category;
 
-	Photo.find(category).toArray(function(err, foundPhotos){
+	Photo.find(category, function(err, foundPhotos){
 		if(err) throw err;
 
 		var urls = [];
 
 		for (var i = 0; i < foundPhotos.length; i++) {
 			var currentPhoto = foundPhotos[i];
+      console.log('currentphoto is ', currentPhoto)
 			var photoUrl = currentPhoto._id + '.' + currentPhoto.fileType;
 			console.log(photoUrl);
 			urls.push(photoUrl);
