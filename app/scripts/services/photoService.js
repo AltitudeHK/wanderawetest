@@ -3,6 +3,7 @@
 angular.module('wanderaweApp')
   .service('Photo', ['$http', '$upload', '$state', 'window', function Photo($http, $upload, $state, window) {
     var lastUploadedFileType; // string
+    var gridHeight = 300; // pixels
 
     this.uploadPhoto = function (photoInfo, file) {
       // $http.get('/auth/facebook', photoInfo)
@@ -38,4 +39,6 @@ angular.module('wanderaweApp')
     this.retrieveAllPhotos = function (navigationInfo) {
       return $http.post('/getPhotos', navigationInfo);
     };
+
+    
   }]);
