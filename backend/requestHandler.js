@@ -7,44 +7,25 @@ var express       = require('express'),
     querystring   = require('querystring'),
     request       = require('request'),
     url           = require('url'),
-    passport      = require('passport'),
     __directory 	= path.join(__dirname, '../app/photos');
 
-var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/wanderful');
+var MongoClient = require('mongodb').MongoClient,
+    Server      = require('mongodb').Server,
+    ObjectId    = require('mongodb').ObjectID,
+    mongoclient = new MongoClient(new Server('localhost', 27017)),
+    db          = mongoclient.db('wanderawe');
 
-var db = mongoose.connection;
 
-db.on('error', console.error.bind(console, 'connection error:'));
 
-db.once('open', function callback () {
-  console.log('yay')
-});
+var headers = {
 
-// var Schema = mongoose.Schema;
-
-// var userSchema = new Schema({
-//   username : { type: String, index: true},
-//   password : String,
-//   createdAt: { type: Date, default: Date.now},
-//   updatedAt: { type: Date, default: Date.now}
-// });
-
-// mongoose.model('Users', userSchema);
-
-// var headers = {
-
-// };
+};
 
 
 /////////////////////////////////////////////////////////////////////////
 //////////////////////////AUTHENTICATION/////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
-var User = require('./models/user')
-
-////////////////////////////// local ////////////////////////////////////
 exports.signup = function(req, res) {
   var userInfo  = req.body,
       isNew     = false;
@@ -97,41 +78,41 @@ exports.login = function(req, res){
     });
 };
 
-////////////////////////////// Facebook //////////////////////////////////
-
-exports.Facebook = function(req, res){
-
-}
-////////////////////////////// Twitter ///////////////////////////////////
-
-
 /////////////////////////////////////////////////////////////////////////
-/////////////////////////////Photos//////////////////////////////////////
+/////////////////////////////UPLOAD//////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
-var Photo = require('./models/photo')
 
 exports.upload = function(req, res) {
 
-	var photoInfo = req.body,
-      file      = req.files.file,
-      fileType  = file.type.slice(6);
+	var title       = req.body.title,
+			author      = req.body.author,
+			country    	= req.body.country,
+			month       = req.body.month,
+			year        = req.body.year,
+			description = req.body.description,
+			people 			= req.body.people,
+			nature 			= req.body.nature,
+			culture 		= req.body.culture,
+			file 				= req.files.file,
+			fileType    = file.type.slice(6),
+	    photoInfo   = {
+  			author         : author,
+  			title          : title,
+  			country	       : country,
+  			month          : month,
+  			year		   		 : year,
+  			description    : description,
+  			people		     : people,
+  			nature         : nature,
+  			culture        : culture,
+  			likes          : 0,
+  			likedUser      : [],
+  			fileType       : fileType
+	    };
 
-  //attaching the fileType to photoInfo because fileType is part of req.files, not part of req.body
-  photoInfo.fileType = fileType;
-	
-  console.log('photoInfo in req is, ', photoInfo);
-
-  var newPhoto = new Photo(photoInfo);
-
-  console.log(newPhoto)
-
-  Photo.create(newPhoto, function(err, insertedPhotoInfo){
+  db.collection('photos').insert(photoInfo, function(err, insertedPhotoInfo){
     if(err) throw err;
-
-    console.log('InsertedPhotoInfo is ,', insertedPhotoInfo)
-
-    var photoId = insertedPhotoInfo._id;
+    var photoId = insertedPhotoInfo[0]._id;
 
     //create directory if it does not exist already
     fs.exists(__directory, function(exists){
@@ -163,18 +144,22 @@ exports.upload = function(req, res) {
 };
 
 
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////Photos//////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+
 exports.getPhotos = function(req, res){
 	console.log(req.body);
 	var category = req.body.category;
 
-	Photo.find(category, function(err, foundPhotos){
+	db.collection('photos').find(category).toArray(function(err, foundPhotos){
+    console.log(foundPhotos);
 		if(err) throw err;
 
 		var urls = [];
 
 		for (var i = 0; i < foundPhotos.length; i++) {
 			var currentPhoto = foundPhotos[i];
-      console.log('currentphoto is ', currentPhoto)
 			var photoUrl = currentPhoto._id + '.' + currentPhoto.fileType;
 			console.log(photoUrl);
 			urls.push(photoUrl);
@@ -188,7 +173,7 @@ exports.getOnePhoto = function(req, res){
 	var photoId = req.body.photoId;
   var query = {_id: new ObjectId(photoId)};
 
-  Photo.findOne(query, function(err, photo){
+  db.collection('photos').findOne(query, function(err, photo){
     if(err) throw err;
     var photoUrl = _directory + '/' + photo;
     res.send(200, photo);
@@ -205,15 +190,13 @@ exports.voteUp = function(req, res) {
     $inc: { vote : 1 }
   };
 
-  Photo.update(query, update, function(err, dontcare){
+  db.collection('posts').update(query, update, function(err, dontcare){
       if(err) throw err;
       console.log('callback after incrementing vote by 1 : ', dontcare);
   });
 };
 
 
-
-
-// mongoclient.open(function (error, mongoclient) {
-// 	if (error) throw error;
-// });
+mongoclient.open(function (error, mongoclient) {
+	if (error) throw error;
+});
