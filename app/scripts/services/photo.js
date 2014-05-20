@@ -35,11 +35,6 @@ angular.module('wanderaweApp')
     };
 
     this.retrieveAllPhotos = function (navigationInfo) {
-      $http
-        .post('/getPhotos', navigationInfo)
-        .success(function (res) {
-          console.log('retrieve all photos successfully');
-          console.log(res);
-        });
+      return $http.post('/getPhotos', navigationInfo);
     };
   }]);
