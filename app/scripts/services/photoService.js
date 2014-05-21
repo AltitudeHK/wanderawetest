@@ -6,21 +6,20 @@ angular.module('wanderaweApp')
     var gridHeight = 300; // pixels
 
     this.uploadPhoto = function (photoInfo, file) {
-      // $http.get('/auth/facebook', photoInfo)
-      // $upload
-      //   .upload({
-      //     url: 'upload',
-      //     data: photoInfo,
-      //     file: file
-      //   })
-      //   .progress(function() {
-      //     // console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-      //   })
-      //   .success(function(res) {
-      //     console.log('upload photo successfully');
-      //     $state.go('singlephoto', res);
-      //     lastUploadedFileType = res.fileType;
-      //   });
+      $upload
+        .upload({
+          url: 'upload',
+          data: photoInfo,
+          file: file
+        })
+        .progress(function() {
+          // console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+        })
+        .success(function(res) {
+          console.log('upload photo successfully');
+          $state.go('singlephoto', res);
+          lastUploadedFileType = res.fileType;
+        });
     };
 
     this.getLastUploadedFileType = function () {
