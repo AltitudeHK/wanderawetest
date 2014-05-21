@@ -76,6 +76,9 @@ module.exports = function(app, passport) {
   app.get('/auth/facebook/callback',
     function(req, res){
       console.log('facebook login success!');
+      res.cookie('currentUser', JSON.stringify({
+        role: 2
+      }));
       res.redirect('/', 302);
     }
   );
