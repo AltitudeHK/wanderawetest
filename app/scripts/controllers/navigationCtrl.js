@@ -2,21 +2,50 @@
 
 angular.module('wanderaweApp')
   .controller('NavigationCtrl', ['$scope', 'Photo', function ($scope, Photo) {
-    $scope.navigationInfo = {};
     $scope.isSignedIn = true; // this should be false but leave true for now
 
+    $scope.navigationInfo = {
+      country: null,
+      nature: false,
+      culture: false,
+      people: false
+    };
+
     $scope.resetNavigationInfo = function () {
-      $scope.navigationInfo = {};
+      // only reset nature, culture and people
+      $scope.navigationInfo.nature = false;
+      $scope.navigationInfo.culture = false;
+      $scope.navigationInfo.people = false;
     };
 
     $scope.isDiscover = function () {
-      // getPhoto
-      $scope.resetNavigationInfo();
-      $scope.navigationInfo = {
-        country: null
-      };
+      // Nature, Culture, and People should all be false
+      // Country can be null or have a string value
+      // Regardless of what navigationInfo is, should send this object to backend as is
 
-      console.log($scope.navigationInfo);
+      $scope.resetNavigationInfo();
       Photo.retrieveAllPhotos($scope.navigationInfo);
     };
+
+    $scope.isNature = function () {
+      // User clicked on nature button; therefore, toggle nature to true
+      $scope.resetNavigationInfo();
+      $scope.navigationInfo.nature = true;
+      Photo.retrieveAllPhotos($scope.navigationInfo);
+    };
+
+    $scope.isCulture = function () {
+      // User clicked on culture button; therefore, toggle culture to true
+      $scope.resetNavigationInfo();
+      $scope.navigationInfo.culture = true;
+      Photo.retrieveAllPhotos($scope.navigationInfo);
+    };
+
+    $scope.isPeople = function () {
+      // User clicked on people button; therefore, toggle people to true
+      $scope.resetNavigationInfo();
+      $scope.navigationInfo.people = true;
+      Photo.retrieveAllPhotos($scope.navigationInfo);
+    };
+
   }]);
