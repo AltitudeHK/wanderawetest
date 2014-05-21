@@ -2,8 +2,12 @@
 
 angular.module('wanderaweApp')
   .controller('GalleryCtrl', ['$scope', 'Photo', function ($scope, Photo) {
-    $scope.pictures = [];
-    
+    $scope.pictures = []; // array of objects that look like this: { "name": "537acf591ba61f0000f8401d.jpeg", "height": 300, "width": 300 }
+
+    $scope.setHeight = function (photoObj) {
+      return Photo.resizePhotoHeight(photoObj) + '%';
+    };
+
     // array of photos from server / database that have already been filtered by criteria ('Nature in China')
     Photo.retrieveAllPhotos({}).success(function (res) {
       console.log('retrieve all photos successfully');
