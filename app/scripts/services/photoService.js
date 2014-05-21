@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .service('Photo', ['$http', '$upload', '$state', function Photo($http, $upload, $state) {
+  .service('Photo', ['$http', '$upload', '$state', '$cookieStore', function Photo($http, $upload, $state, $cookieStore) {
     var lastUploadedFileType; // string
     var gridHeight = 300; // pixels
 
@@ -36,6 +36,7 @@ angular.module('wanderaweApp')
     };
 
     this.retrieveAllPhotos = function (navigationInfo) {
+      console.log($cookieStore.get('currentUser'))
       return $http.post('/getPhotos', navigationInfo);
     };
 
