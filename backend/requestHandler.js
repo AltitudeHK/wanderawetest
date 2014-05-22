@@ -106,22 +106,22 @@ var Photo = require('./models/photo')
 exports.upload = function(req, res) {
 
   var photoInfo = req.body,
-      file      = req.files.file,
-      fileType  = file.type.slice(6);
+      file      = req.body.file,
+      fileType  = file.type.slice(6),
+      fileWidth = file.width,
+      fileHeight= file.height;
+
+  console.log('the files is', req.files)
 
   //attaching the fileType to photoInfo because fileType is part of req.files, not part of req.body
   photoInfo.fileType = fileType;
   
-  console.log('photoInfo in req is, ', photoInfo);
-
   var newPhoto = new Photo(photoInfo);
 
   console.log(newPhoto)
 
   Photo.create(newPhoto, function(err, insertedPhotoInfo){
     if(err) throw err;
-
-    console.log('InsertedPhotoInfo is ,', insertedPhotoInfo)
 
     var photoId = insertedPhotoInfo._id;
 
@@ -148,7 +148,7 @@ exports.upload = function(req, res) {
       fs.unlink(tmpPath, function() {
         if (err) throw err;
         // console.log("fileType", fileType);
-        res.send({'photoId': photoId, 'fileType': fileType});
+        res.send({'photoId': photoId, 'fileType': fileType, 'height': fileHeight, 'width' : fileWidth });
       });
     });
   });
