@@ -8,8 +8,7 @@ angular.module('wanderaweApp')
 
     $scope.submitForm = function (isValid) {
       if (isValid) {
-        $scope.photoInfo.file = $scope.file;
-        Photo.uploadPhoto($scope.photoInfo);
+        Photo.uploadPhoto($scope.photoInfo, $scope.file);
       }
     };
 
