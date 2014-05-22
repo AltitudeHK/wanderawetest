@@ -27,10 +27,10 @@
     <div class="header" ng-controller="NavigationCtrl">
       <ng-include src="isSignedIn ? 'views/signed_in.html' : 'views/not_signed_in.html'"></ng-include>
       <ul class="nav nav-pills pull-right">
-        <li><a ui-sref="gallery" ng-click="isDiscover()">Discover</a></li>
-        <li><a ui-sref="gallery">Nature</a></li>
-        <li><a ui-sref="gallery">Culture</a></li>
-        <li><a ui-sref="gallery">People</a></li>
+        <li><a ui-sref="gallery" ng-click="sendNavigationInfo('discover')">Discover</a></li>
+        <li><a ui-sref="gallery" ng-click="sendNavigationInfo('nature')">Nature</a></li>
+        <li><a ui-sref="gallery" ng-click="sendNavigationInfo('culture')">Culture</a></li>
+        <li><a ui-sref="gallery" ng-click="sendNavigationInfo('people')">People</a></li>
       </ul>
       <h3 class="text-muted"><a ui-sref="map">wanderawe</a></h3>
     </div> <!-- header -->
@@ -76,7 +76,6 @@
         <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/routingConfig.js"></script>
-        <script src="scripts/controllers/mainCtrl.js"></script>
         <script src="scripts/controllers/mapCtrl.js"></script>
         <script src="scripts/controllers/aboutCtrl.js"></script>
         <script src="scripts/controllers/singlephotoCtrl.js"></script>
@@ -89,7 +88,8 @@
         <script src="scripts/services/photoService.js"></script>
         <script src="scripts/services/monthService.js"></script>
         <script src="scripts/services/yearService.js"></script>
-        <script src="scripts/services/userService.js"></script
+        <script src="scripts/services/gallerystorageservice.js"></script>
+        <script src="scripts/services/userService.js"></script>
         <!-- endbuild -->
 </body>
 </html>
