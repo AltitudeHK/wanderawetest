@@ -6,20 +6,20 @@ angular.module('wanderaweApp')
     var gridHeight = 300; // pixels
 
     var svc = {};
-    svc.uploadPhoto = function (photoInfo, file) {
+    svc.uploadPhoto = function (photoInfo) {
       $upload
         .upload({
           url: 'upload',
-          data: photoInfo,
-          file: file
+          data: photoInfo
         })
         .progress(function() {
           // console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
         })
-        .success(function(res) {
+        .success(function(data) {
+          console.log('data:', data);
           console.log('upload photo successfully');
-          $state.go('singlephoto', res);
-          lastUploadedFileType = res.fileType;
+          $state.go('singlephoto', data);
+          lastUploadedFileType = data.fileType;
         });
     };
 
@@ -42,7 +42,7 @@ angular.module('wanderaweApp')
       // $http
       //   .post('/getPhotos', navigationInfo)
       //   .success(function (res) {
-          
+
       //   });
     };
 
