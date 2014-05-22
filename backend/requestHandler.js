@@ -9,18 +9,22 @@ var express       = require('express'),
     url           = require('url'),
     __directory 	= path.join(__dirname, '../app/photos');
 
+var mongoose = require('mongoose');
 
-var MongoClient = require('mongodb').MongoClient,
-    Server      = require('mongodb').Server,
-    ObjectId    = require('mongodb').ObjectID,
-    mongoclient = new MongoClient(new Server('localhost', 27017)),
-    db          = mongoclient.db('wanderawe');
+mongoose.connect('mongodb://localhost:27017/wanderful');
 
+var db = mongoose.connection;
 
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function callback () {
+  console.log('yay')
+});
 
 var headers = {
 
 };
+
 exports.authFacebookCallback = function(req, res, next, passport) {
   passport.authenticate('facebook', function (err, user) {
     if (err) { return next(err); }
@@ -35,6 +39,11 @@ exports.authFacebookCallback = function(req, res, next, passport) {
 /////////////////////////////////////////////////////////////////////////
 //////////////////////////AUTHENTICATION/////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
+
+var User = require('./models/user')
+
+////////////////////////////// local ////////////////////////////////////
+
 exports.signup = function(req, res) {
   var userInfo  = req.body,
       isNew     = false;
@@ -87,41 +96,34 @@ exports.login = function(req, res){
     });
 };
 
+
 /////////////////////////////////////////////////////////////////////////
-/////////////////////////////UPLOAD//////////////////////////////////////
+/////////////////////////////Photos//////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
+
+var Photo = require('./models/photo')
 
 exports.upload = function(req, res) {
 
-	var title       = req.body.title,
-			author      = req.body.author,
-			country    	= req.body.country,
-			month       = req.body.month,
-			year        = req.body.year,
-			description = req.body.description,
-			people 			= req.body.people,
-			nature 			= req.body.nature,
-			culture 		= req.body.culture,
-			file 				= req.files.file,
-			fileType    = file.type.slice(6),
-	    photoInfo   = {
-  			author         : author,
-  			title          : title,
-  			country	       : country,
-  			month          : month,
-  			year		   		 : year,
-  			description    : description,
-  			people		     : people,
-  			nature         : nature,
-  			culture        : culture,
-  			likes          : 0,
-  			likedUser      : [],
-  			fileType       : fileType
-	    };
+  var photoInfo = req.body,
+      file      = req.files.file,
+      fileType  = file.type.slice(6);
 
-  db.collection('photos').insert(photoInfo, function(err, insertedPhotoInfo){
+  //attaching the fileType to photoInfo because fileType is part of req.files, not part of req.body
+  photoInfo.fileType = fileType;
+  
+  console.log('photoInfo in req is, ', photoInfo);
+
+  var newPhoto = new Photo(photoInfo);
+
+  console.log(newPhoto)
+
+  Photo.create(newPhoto, function(err, insertedPhotoInfo){
     if(err) throw err;
-    var photoId = insertedPhotoInfo[0]._id;
+
+    console.log('InsertedPhotoInfo is ,', insertedPhotoInfo)
+
+    var photoId = insertedPhotoInfo._id;
 
     //create directory if it does not exist already
     fs.exists(__directory, function(exists){
@@ -133,63 +135,59 @@ exports.upload = function(req, res) {
     });
 
     //create the file with the unique id created by mongo as its name
-		// http://www.hacksparrow.com/handle-file-uploads-in-express-node-js.html 
-		// get the temporary location of the file
-		var tmpPath = file.path;
-		// set where the file should actually exists - in this case it is in the "images" directory
-		// var targetPath = './uploads/' + req.files.file.name;
-		// move the file from the temporary location to the intended location
+    // http://www.hacksparrow.com/handle-file-uploads-in-express-node-js.html 
+    // get the temporary location of the file
+    var tmpPath = file.path;
+    // set where the file should actually exists - in this case it is in the "images" directory
+    // var targetPath = './uploads/' + req.files.file.name;
+    // move the file from the temporary location to the intended location
     fs.rename(tmpPath, __directory + '/' + photoId + '.' + fileType, function(err){
       if(err) throw err;
       // var reader = new FileReader();
-		  // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
-		  fs.unlink(tmpPath, function() {
-		    if (err) throw err;
+      // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
+      fs.unlink(tmpPath, function() {
+        if (err) throw err;
         // console.log("fileType", fileType);
-		    res.send({'photoId': photoId, 'fileType': fileType});
-	    });
+        res.send({'photoId': photoId, 'fileType': fileType});
+      });
     });
   });
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////Photos//////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-
 exports.getPhotos = function(req, res){
-	console.log(req.body);
-	var category = req.body.category;
+  console.log(req.body);
+  var category = req.body.category;
 
-	db.collection('photos').find(category).toArray(function(err, foundPhotos){
-    console.log(foundPhotos);
-		if(err) throw err;
+  Photo.find(category, function(err, foundPhotos){
+    if(err) throw err;
 
-		var urls = [];
+    var urls = [];
 
-		for (var i = 0; i < foundPhotos.length; i++) {
-			var currentPhoto = foundPhotos[i];
-			var photoUrl = currentPhoto._id + '.' + currentPhoto.fileType;
-			console.log(photoUrl);
-			urls.push(photoUrl);
-		}
-		console.log('found!', urls);
-	  res.send(200, urls);
+    for (var i = 0; i < foundPhotos.length; i++) {
+      var currentPhoto = foundPhotos[i];
+      console.log('currentphoto is ', currentPhoto)
+      var photoUrl = currentPhoto._id + '.' + currentPhoto.fileType;
+      console.log(photoUrl);
+      urls.push(photoUrl);
+    }
+    console.log('found!', urls);
+    res.send(200, urls);
   });
 };
 
 exports.getOnePhoto = function(req, res){
-	var photoId = req.body.photoId;
+  var photoId = req.body.photoId;
   var query = {_id: new ObjectId(photoId)};
 
-  db.collection('photos').findOne(query, function(err, photo){
+  Photo.findOne(query, function(err, photo){
     if(err) throw err;
     var photoUrl = _directory + '/' + photo;
     res.send(200, photo);
   });
-	// db.collection('photos').findOne({_id: photoID}, function(err, photoFound){
-	// 	//retrieve the actual photo from __dir/public.phots
-	// }
+  // db.collection('photos').findOne({_id: photoID}, function(err, photoFound){
+  //  //retrieve the actual photo from __dir/public.phots
+  // }
 };
 
 exports.voteUp = function(req, res) {
@@ -199,13 +197,9 @@ exports.voteUp = function(req, res) {
     $inc: { vote : 1 }
   };
 
-  db.collection('posts').update(query, update, function(err, dontcare){
+  Photo.update(query, update, function(err, dontcare){
       if(err) throw err;
       console.log('callback after incrementing vote by 1 : ', dontcare);
   });
 };
 
-
-mongoclient.open(function (error, mongoclient) {
-	if (error) throw error;
-});
