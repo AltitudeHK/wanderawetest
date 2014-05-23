@@ -62,6 +62,17 @@ angular
         url: '/singlephoto/:photoId',
         templateUrl: 'views/singlephoto.html',
         controller: 'SinglephotoCtrl',
+        resolve: {
+          picture: ['$stateParams', 'Photo', function ($stateParams, Photo) {
+            console.log('stateParams.photoId is:', $stateParams.photoId);
+            return Photo
+              .retrieveOnePhoto($stateParams.photoId)
+              .success(function (data) {
+                console.log('Successfully reached single photo page', data);
+                return data;
+              });
+          }]
+        },
         access: access.anon
       })
       .state('upload', {
