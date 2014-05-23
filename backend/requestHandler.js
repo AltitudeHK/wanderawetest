@@ -18,18 +18,18 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function callback () {
-  console.log('yay')
+  console.log('yay');
 });
 
 var headers = {
 
 };
 
-exports.authFacebookCallback = function(req, res, next, passport) {
+exports.authFacebookCallback = function(req, res, next, passport){
   passport.authenticate('facebook', function (err, user) {
     if (err) { return next(err); }
     if (!user) { return res.redirect('/'); }
-    req.login(user, function (err) {
+    req.login(user, function(err) {
       if (err) { return next(err); }
       return res.redirect('/#/dash/loading');
     });
@@ -40,14 +40,15 @@ exports.authFacebookCallback = function(req, res, next, passport) {
 //////////////////////////AUTHENTICATION/////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
-var User = require('./models/user')
+var User = require('./models/user');
 
 ////////////////////////////// local ////////////////////////////////////
 
-exports.signup = function(req, res) {
+exports.signup = function(req, res){
   var userInfo  = req.body,
       isNew     = false;
-  db.collection('users').findOne({email: userInfo.email}, function(error, userByEmail){
+
+  db.collection('users').findOne({ email: userInfo.email }, function(error, userByEmail){
     if (error) throw error;
 
     if (userByEmail === null) { // there is no existing user with the email
@@ -57,7 +58,7 @@ exports.signup = function(req, res) {
     if (isNew) {
       var user = {
         email   : req.body.email,
-        password: req.body.password,
+        password: req.body.password
         // role    : routingConfig.userRoles.user
       };
 
@@ -78,22 +79,21 @@ exports.signup = function(req, res) {
 };
 
 exports.login = function(req, res){
-    var userInfo = req.body;
-    var isValid = false;
+  var userInfo = req.body;
+  var isValid = false;
 
-    db.collection('users').findOne({username: userInfo.username}, function(error, found){
-
-      if(found === null){
-        res.send(200, false);
-      }else if(found.password === userInfo.password){ //FIX LATER need to hash
-        res.cookie('currentUser', JSON.stringify({
-          username: found.username,
-          role: found.role
-        }));
-        currentUserName = found.username;
-        res.send(200, found);
-      }
-    });
+  db.collection('users').findOne({username: userInfo.username}, function(error, found){
+    if (found === null){
+      res.send(200, false);
+    }else if(found.password === userInfo.password){ //FIX LATER need to hash
+      res.cookie('currentUser', JSON.stringify({
+        username: found.username,
+        role: found.role
+      }));
+      currentUserName = found.username;
+      res.send(200, found);
+    }
+  });
 };
 
 
@@ -101,7 +101,7 @@ exports.login = function(req, res){
 /////////////////////////////Photos//////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
-var Photo = require('./models/photo')
+var Photo = require('./models/photo');
 
 exports.upload = function(req, res) {
 
@@ -109,25 +109,26 @@ exports.upload = function(req, res) {
       file      = req.files.file,
       fileType  = file.type.slice(6);
 
-  console.log('the files is', req.files)
+  console.log('within upload: photoInfo is - ', photoInfo);
+  console.log('within upload: req.files is', req.files);
 
   //attaching the fileType to photoInfo because fileType is part of req.files, not part of req.body
   photoInfo.fileType = fileType;
   
   var newPhoto = new Photo(photoInfo);
 
-  console.log(newPhoto)
+  console.log('newPhoto is', newPhoto);
 
   Photo.create(newPhoto, function(err, insertedPhotoInfo){
-    if(err) throw err;
+    if (err) throw err;
 
     var photoId = insertedPhotoInfo._id;
 
     //create directory if it does not exist already
-    fs.exists(__directory, function(exists){
-      if(!exists){
+    fs.exists(__directory, function(exists) {
+      if (!exists) {
         fs.mkdir(__directory, function(err, data){
-          if(err) throw err;
+          if (err) throw err;
         });
       }
     });
@@ -140,7 +141,7 @@ exports.upload = function(req, res) {
     // var targetPath = './uploads/' + req.files.file.name;
     // move the file from the temporary location to the intended location
     fs.rename(tmpPath, __directory + '/' + photoId + '.' + fileType, function(err){
-      if(err) throw err;
+      if (err) throw err;
       // var reader = new FileReader();
       // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
       fs.unlink(tmpPath, function() {
@@ -152,24 +153,26 @@ exports.upload = function(req, res) {
   });
 };
 
-
 exports.getPhotos = function(req, res){
-  console.log(req.body);
+  console.log('within getPhotos: req.body is - ', req.body);
   var category = req.body.category;
+  // var category = { 'people': true };
+  console.log('within getPhotos: category is - ', category);
 
   Photo.find(category, function(err, foundPhotos){
+    console.log('foundPhotos', foundPhotos);
     if(err) throw err;
 
     var urls = [];
 
     for (var i = 0; i < foundPhotos.length; i++) {
       var currentPhoto = foundPhotos[i];
-      console.log('currentphoto is ', currentPhoto)
+      console.log('within getPhotos: currentphoto is - ', currentPhoto);
       var photoUrl = currentPhoto._id + '.' + currentPhoto.fileType;
-      console.log(photoUrl);
+      console.log('within getPhotos: photoUrl is - ', photoUrl);
       urls.push(photoUrl);
     }
-    console.log('found!', urls);
+    console.log('found within getPhotos!', urls);
     res.send(200, urls);
   });
 };
@@ -190,14 +193,14 @@ exports.getOnePhoto = function(req, res){
 
 exports.voteUp = function(req, res) {
   var photoId = req.body.photoId;
-  var query = {_id: new ObjectId(photoId)};
+  var query = { _id: new ObjectId(photoId) };
   var update = {
     $inc: { vote : 1 }
   };
 
   Photo.update(query, update, function(err, dontcare){
-      if(err) throw err;
-      console.log('callback after incrementing vote by 1 : ', dontcare);
+    if(err) throw err;
+    console.log('callback after incrementing vote by 1 : ', dontcare);
   });
 };
 
