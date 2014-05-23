@@ -1,6 +1,5 @@
 module.exports = function(app, passport) {
 
-
   var allowCrossDomain = function(req, res, next) {
      res.header('Access-Control-Allow-Origin', '*');
      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -74,16 +73,12 @@ module.exports = function(app, passport) {
 
   // handle the callback after facebook has authenticated the user
   app.get('/auth/facebook/callback',
-    function(req, res, next, passport){
-      console.log('facebook login success!');
-      res.cookie('currentUser', JSON.stringify({
-        role: 2
-      }));
-      res.redirect('/', 302);
+    function(req, res, next){
+      authFacebookCallback(req, res, next, passport);
     }
   );
 
-exports.authFacebookCallback = function(req, res, next, passport) {
+var authFacebookCallback = function(req, res, next, passport) {
 
   passport.authenticate('facebook', function(err, user) {
 
