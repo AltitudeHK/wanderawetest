@@ -1,28 +1,25 @@
-(function () {
-  'use strict';
+'use strict';
 
 angular.module('wanderaweApp')
-  .factory('userService', ['$state', '$rootScope', '$http', '$cookieStore',
-    function ($state, $rootScope, $http, $cookieStore) {
-      var access      = routingConfig.accessLevels,
-          role        = routingConfig.userRoles,
-          currentUser = $cookieStore.get('currentUser') || { username: '', role: role.public };
+  .factory('userService', ['$state', '$rootScope', '$http', '$cookieStore', function ($state, $rootScope, $http, $cookieStore) {
+    var access      = routingConfig.accessLevels,
+        role        = routingConfig.userRoles,
+        currentUser = $cookieStore.get('currentUser') || { username: '', role: role.public };
 
-      return {
-        isAuthorized: function (accessLevel, userRole) {
-          console.log('isauthorised?', accessLevel, userRole, accessLevel <= userRole)
-          if (userRole === 'undefined') {
-            return true
-            userRole = currentUser.role;
-          }
-          return (accessLevel <= userRole);
-        },
+    return {
+      isAuthorized: function (accessLevel, userRole) {
+        console.log('isauthorised?', accessLevel, userRole, accessLevel <= userRole);
+        if (userRole === 'undefined') {
+          return true;
+          userRole = currentUser.role;
+        }
+        return (accessLevel <= userRole);
+      },
 
-        isLoggedIn: function (currentUser) {
-          console.log('islogged in?')
-
-          return currentUser.role >= role.user;
-        },
+      isLoggedIn: function (currentUser) {
+        console.log('islogged in?');
+        return currentUser.role >= role.user;
+      }
 
         // signup: function (email, image, username, password) {
         //   var userInfo = {
@@ -69,6 +66,6 @@ angular.module('wanderaweApp')
         //   $state.go('/');
         // },
 
-      };
-    }]);
-}());
+    };
+  }]);
+

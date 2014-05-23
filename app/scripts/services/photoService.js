@@ -12,12 +12,8 @@ angular.module('wanderaweApp')
           data: photoInfo,
           file: file
         })
-        .progress(function() {
-          // console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-        })
         .success(function(data) {
-          console.log('success!!')
-          console.log('Uploaded photo:', data);
+          console.log('Successfully uploaded photo:', data);
           $state.go('singlephoto', data);
         });
     };
@@ -32,8 +28,7 @@ angular.module('wanderaweApp')
     };
 
     svc.getPhotoHeight = function (photoObj) {
-      // photoObj will be an object that looks like
-      // { "photoId": "537acf591ba61f0000f8401d", "fileType": "jpeg", "height": 300, "width": 300 }
+      // photoObj: { "photoId": "537acf591ba61f0000f8401d", "fileType": "jpeg", "height": 300, "width": 300 }
       return photoObj.height;
     };
 

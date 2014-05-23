@@ -72,20 +72,20 @@ angular
       });
   })
 
-  .run(['$rootScope', '$state', '$cookieStore', 'userService', '$location', function ($rootScope, $state, $cookieStore, userService, $location) {
-    $rootScope.$on("$stateChangeStart", function (event, next, currentUser) {
-      var currentUser = $cookieStore.get('currentUser') || {role: 1};
-      console.log(next, next.access)
-      console.log('current user role is', currentUser)
-      if(currentUser === undefined){debugger}
-        if (!userService.isAuthorized(next.access, currentUser.role)) {
-          event.preventDefault();
-            if(userService.isLoggedIn(currentUser)){
-              $state.go('map');
-            }else{
-              $state.go('map');
-            }
+  .run(['$rootScope', '$state', '$cookieStore', 'userService', function ($rootScope, $state, $cookieStore, userService) {
+    $rootScope.$on('$stateChangeStart', function (event, next, currentUser) {
+      currentUser = $cookieStore.get('currentUser') || {role: 1};
+      // console.log(next, next.access)
+      // console.log('current user role is', currentUser)
+      if (currentUser === undefined) { debugger; }
+      if (!userService.isAuthorized(next.access, currentUser.role)) {
+        event.preventDefault();
+        if (userService.isLoggedIn(currentUser)) {
+          $state.go('map');
+        } else {
+          $state.go('map');
         }
+      }
     });
     // $rootScope.$on('invalidSignUp', function(event, message){
     //   alert(message);
@@ -93,4 +93,4 @@ angular
     // $rootScope.$on('invalidLogIn', function(event, message){
     //   alert(message);
     // });
-}]);
+  }]);
