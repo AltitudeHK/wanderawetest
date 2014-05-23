@@ -17,6 +17,7 @@ angular.module('wanderaweApp')
           // console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
         })
         .success(function(data) {
+          console.log('success!!')
           console.log('Uploaded photo:', data);
           $state.go('singlephoto', data);
           lastUploadedFileType = data.fileType;

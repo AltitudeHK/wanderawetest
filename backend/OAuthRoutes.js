@@ -74,7 +74,7 @@ module.exports = function(app, passport) {
 
   // handle the callback after facebook has authenticated the user
   app.get('/auth/facebook/callback',
-    function(req, res){
+    function(req, res, next, passport){
       console.log('facebook login success!');
       res.cookie('currentUser', JSON.stringify({
         role: 2
@@ -82,6 +82,34 @@ module.exports = function(app, passport) {
       res.redirect('/', 302);
     }
   );
+
+exports.authFacebookCallback = function(req, res, next, passport) {
+
+  passport.authenticate('facebook', function(err, user) {
+
+    if(err){
+      return next(err);
+    }
+
+    if(!user){
+      return res.redirect('/');
+    }
+
+    req.login(user, function(err) {
+      if(err){
+        return next(err);
+      }
+      res.cookie(JSON.stringify(user));
+      return res.redirect('/#/dash');
+    });
+
+  })(req, res, next);
+
+};
+
+
+
+
 
   // =====================================
   // LOGOUT ==============================
