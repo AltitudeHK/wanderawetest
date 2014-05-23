@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .controller('GalleryCtrl', ['$scope', 'Photo', 'Gallerystorageservice', function ($scope, Photo, Gallerystorageservice) {
-    $scope.pictures = Gallerystorageservice.photos; // array of objects that look like this: { "photoId": "537acf591ba61f0000f8401d", "fileType": "jpeg", "height": 300, "width": 300 }
+  .controller('GalleryCtrl', ['$scope', 'Photo', 'GallerystorageService', function ($scope, Photo, GallerystorageService) {
+    $scope.pictures = GallerystorageService.photos; // array of objects that look like this: { "photoId": "537acf591ba61f0000f8401d", "fileType": "jpeg", "height": 300, "width": 300 }
 
     $scope.setHeight = function (photoObj) {
       return Photo.resizePhotoHeight(photoObj) + '%';

@@ -30,6 +30,13 @@
         <p ng-show="userForm.year.$invalid && !userForm.year.$pristine" class="help-block">Please provide the year this photo was taken.</p>
       </div>    
 
+      <!-- Category -->
+      <div class="form-group" ng-class="{ 'has-error': userForm.category.$invalid && !userForm.category.$pristine }">
+        <label>Category</label>
+        <select ng-model="photoInfo.category" ng-options="category for category in categories" required></select>
+        <p ng-show="userForm.category.$invalid && !userForm.category.$pristine" class="help-block">Please select one category to associate with this photo.</p>
+      </div>
+
       <!-- Description -->
       <div class="form-group" ng-class="{ 'has-error': userForm.description.$invalid && !userForm.description.$pristine }">
         <label>Description</label>
