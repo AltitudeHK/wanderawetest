@@ -24,8 +24,8 @@ angular.module('wanderaweApp')
         image.src = _file.target.result;
         image.onload = function () {
           // adding width and height manually
-          $scope.file.width = this.width;
-          $scope.file.height = this.height;
+          $scope.photoInfo.width = this.width;
+          $scope.photoInfo.height = this.height;
         };
       };
     };
