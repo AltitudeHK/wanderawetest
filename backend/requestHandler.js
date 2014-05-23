@@ -176,11 +176,11 @@ exports.getPhotos = function(req, res){
 
 exports.getOnePhoto = function(req, res){
   var photoId = req.body.photoId;
-  var query = {_id: new ObjectId(photoId)};
+  var query = {_id: new Object(photoId)};
 
   Photo.findOne(query, function(err, photo){
     if(err) throw err;
-    var photoUrl = _directory + '/' + photo;
+    var photoUrl = __directory + '/' + photo;
     res.send(200, photo);
   });
   // db.collection('photos').findOne({_id: photoID}, function(err, photoFound){
