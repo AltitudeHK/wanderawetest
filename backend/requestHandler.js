@@ -106,10 +106,8 @@ var Photo = require('./models/photo')
 exports.upload = function(req, res) {
 
   var photoInfo = req.body,
-      file      = req.body.file,
-      fileType  = file.type.slice(6),
-      fileWidth = file.width,
-      fileHeight= file.height;
+      file      = req.files.file,
+      fileType  = file.type.slice(6);
 
   console.log('the files is', req.files)
 
@@ -148,7 +146,7 @@ exports.upload = function(req, res) {
       fs.unlink(tmpPath, function() {
         if (err) throw err;
         // console.log("fileType", fileType);
-        res.send({'photoId': photoId, 'fileType': fileType, 'height': fileHeight, 'width' : fileWidth });
+        res.send({'photoId': photoId, 'fileType': fileType, 'height': photoInfo.height, 'width' : photoInfo.width });
       });
     });
   });
