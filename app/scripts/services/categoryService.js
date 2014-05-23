@@ -2,7 +2,7 @@
 
 angular.module('wanderaweApp')
   .value('category', [
-    'Culture',
-    'Nature',
-    'People'
+    'culture',
+    'nature',
+    'people'
   ]);
