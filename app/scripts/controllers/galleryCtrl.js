@@ -2,11 +2,11 @@
 
 angular.module('wanderaweApp')
   .controller('GalleryCtrl', ['$scope', 'Photo', 'Gallerystorageservice', function ($scope, Photo, Gallerystorageservice) {
+    $scope.pictures = Gallerystorageservice.photos; // array of objects that look like this: { "name": "537acf591ba61f0000f8401d.jpeg", "height": 300, "width": 300 }
+
     $scope.setHeight = function (photoObj) {
       return Photo.resizePhotoHeight(photoObj) + '%';
     };
-
-    $scope.pictures = Gallerystorageservice.photos; // array of objects that look like this: { "name": "537acf591ba61f0000f8401d.jpeg", "height": 300, "width": 300 }
 
     // array of photos from server / database that have already been filtered by criteria ('Nature in China')
     // Photo.retrieveAllPhotos({}).success(function (res) {

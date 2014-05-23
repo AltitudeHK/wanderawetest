@@ -2,9 +2,10 @@
 
 angular.module('wanderaweApp')
   .controller('SinglephotoCtrl', ['$scope', '$stateParams', 'Photo', function ($scope, $stateParams, Photo) {
-    $scope.photoId = $stateParams.photoId;
-    // call server with photoId
-    
-    $scope.fileType = Photo.getLastUploadedFileType();
-    // console.log('stateParams is', $stateParams);
+    Photo
+      .retrieveOnePhoto($stateParams.photoId)
+      .success(function (data) {
+        // data looks like: { "photoId": "537acf591ba61f0000f8401d", "fileType": "jpeg", "height": 300, "width": 300 }
+        $scope.photoPath = data.photoId + '.' + data.fileType;
+      });
   }]);

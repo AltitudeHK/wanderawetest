@@ -2,7 +2,6 @@
 
 angular.module('wanderaweApp')
   .factory('Photo', ['$http', '$upload', '$state', '$cookieStore', function Photo($http, $upload, $state, $cookieStore) {
-    var lastUploadedFileType; // string
     var gridHeight = 300; // pixels
 
     var svc = {};
@@ -20,21 +19,11 @@ angular.module('wanderaweApp')
           console.log('success!!')
           console.log('Uploaded photo:', data);
           $state.go('singlephoto', data);
-          lastUploadedFileType = data.fileType;
         });
-    };
-
-    svc.getLastUploadedFileType = function () {
-      return lastUploadedFileType;
     };
 
     svc.retrieveOnePhoto = function (photoId) {
-      $http
-        .post('/getOnePhotos', {'photoId': photoId})
-        .success(function (res) {
-          console.log('retrieve one photo successfully');
-          console.log(res);
-        });
+      return $http.post('/getOnePhoto', {'photoId': photoId});
     };
 
     svc.retrieveAllPhotos = function (navigationInfo) {
@@ -44,7 +33,7 @@ angular.module('wanderaweApp')
 
     svc.getPhotoHeight = function (photoObj) {
       // photoObj will be an object that looks like
-      // { "name": "537acf591ba61f0000f8401d.jpeg", "height": 300, "width": 300 }
+      // { "photoId": "537acf591ba61f0000f8401d", "fileType": "jpeg", "height": 300, "width": 300 }
       return photoObj.height;
     };
 
