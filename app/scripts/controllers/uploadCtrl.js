@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .controller('UploadCtrl', ['$scope', 'Photo', 'month', 'year', function ($scope, Photo, month, year) {
+  .controller('UploadCtrl', ['$scope', 'Photo', 'month', 'year', 'category', function ($scope, Photo, month, year, category) {
     $scope.photoInfo = {};
     $scope.months = month;
     $scope.years = year;
+    $scope.categories = category;
 
     $scope.submitForm = function (isValid) {
       if (isValid) {
