@@ -6,6 +6,7 @@ angular.module('wanderaweApp')
 
     var svc = {};
     svc.uploadPhoto = function (photoInfo, file) {
+      console.log('within photo service, photoInfo is:', photoInfo);
       $upload
         .upload({
           url: 'upload',
