@@ -147,6 +147,7 @@ exports.upload = function(req, res) {
       fs.unlink(tmpPath, function() {
         if (err) throw err;
         // console.log("fileType", fileType);
+        console.log('inserted photo info is', insertedPhotoInfo)
         res.send(insertedPhotoInfo);
       });
     });
@@ -186,12 +187,12 @@ exports.getPhotos = function(req, res){
 
 exports.getOnePhoto = function(req, res){
   console.log('req in getOnePhoto is, ', req.body);
-  var photoId = req.body._id;
+  var photoId = req.body.photoId;
   var query = {_id: new Object(photoId)};
 
   Photo.findOne(query, function(err, photo){
     if(err) throw err;
-
+    console.log(photo)
     // var photoInfo = 
     var photoUrl = photo._id + '.' + photo.fileType;
     res.send(200, photo);

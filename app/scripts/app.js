@@ -59,14 +59,14 @@ angular
         access: access.anon
       })
       .state('singlephoto', {
-        url: '/singlephoto/:photoId',
+        url: '/singlephoto/:_id',
         templateUrl: 'views/singlephoto.html',
         controller: 'SinglephotoCtrl',
         resolve: {
           picture: ['$stateParams', 'Photo', function ($stateParams, Photo) {
-            console.log('stateParams.photoId is:', $stateParams.photoId);
+            console.log('stateParams.photoId is:', $stateParams._id);
             return Photo
-              .retrieveOnePhoto($stateParams.photoId)
+              .retrieveOnePhoto($stateParams._id)
               .success(function (data) {
                 console.log('Successfully reached single photo page', data);
                 return data;
