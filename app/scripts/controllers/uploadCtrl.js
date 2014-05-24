@@ -6,10 +6,33 @@ angular.module('wanderaweApp')
     $scope.months = month;
     $scope.years = year;
     $scope.categories = category;
+    $scope.category = {
+      'culture': false,
+      'nature': false,
+      'people': false
+    };
+
+    $scope.resetPhotoInfo = function () {
+      $scope.photoInfo = {};
+    };
+
+    $scope.resetCategory = function () {
+      $scope.category = {
+        'culture': false,
+        'nature': false,
+        'people': false
+      };
+    };
 
     $scope.submitForm = function (isValid) {
       if (isValid) {
+        $scope.category[$scope.selectedCategory] = true;
+        $scope.photoInfo.category = $scope.category;
         Photo.uploadPhoto($scope.photoInfo, $scope.file);
+
+        // reset
+        $scope.resetPhotoInfo();
+        $scope.resetCategory();
       }
     };
 
