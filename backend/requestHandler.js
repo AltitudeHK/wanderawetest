@@ -155,7 +155,15 @@ exports.upload = function(req, res) {
 
 exports.getPhotos = function(req, res){
   console.log('within getPhotos: req.body is - ', req.body);
-  var category = req.body.category;
+  
+  var category = {};
+
+  for (var key in req.body) {
+    if(!req.body[key] == false){
+      category[key] = req.body[key];
+    }
+  };
+
   // var category = { 'people': true };
   console.log('within getPhotos: category is - ', category);
 
@@ -163,17 +171,18 @@ exports.getPhotos = function(req, res){
     console.log('foundPhotos', foundPhotos);
     if(err) throw err;
 
-    var urls = [];
+    var photoInfos = [];
 
     for (var i = 0; i < foundPhotos.length; i++) {
       var currentPhoto = foundPhotos[i];
       console.log('within getPhotos: currentphoto is - ', currentPhoto);
-      var photoUrl = currentPhoto._id + '.' + currentPhoto.fileType;
-      console.log('within getPhotos: photoUrl is - ', photoUrl);
-      urls.push(photoUrl);
+
+      var photoInfo = {'photoId': currentPhoto._id, 'fileType': currentPhoto.fileType, 'height': currentPhoto.height, 'width' : currentPhoto.width };
+      console.log('within getPhotos: photoUrl is - ', photoInfo);
+      photoInfos.push(photoInfo);
     }
-    console.log('found within getPhotos!', urls);
-    res.send(200, urls);
+    console.log('found within getPhotos!', photoInfos);
+    res.send(200, photoInfos);
   });
 };
 
@@ -183,7 +192,9 @@ exports.getOnePhoto = function(req, res){
 
   Photo.findOne(query, function(err, photo){
     if(err) throw err;
-    var photoUrl = __directory + '/' + photo;
+
+    // var photoInfo = 
+    var photoUrl = photo._id + '.' + photo.fileType;
     res.send(200, photo);
   });
   // db.collection('photos').findOne({_id: photoID}, function(err, photoFound){

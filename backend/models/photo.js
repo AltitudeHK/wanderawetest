@@ -13,7 +13,9 @@ var schema =  new mongoose.Schema(
     culture : Boolean,
     likes : Number,
     likedUser : Array,
-    fileType : String
+    fileType : String,
+    height : String,
+    width : String
   }
 );
       

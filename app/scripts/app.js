@@ -85,7 +85,7 @@ angular
 
   .run(['$rootScope', '$state', '$cookieStore', 'userService', function ($rootScope, $state, $cookieStore, userService) {
     $rootScope.$on('$stateChangeStart', function (event, next, currentUser) {
-      currentUser = $cookieStore.get('currentUser') || {role: 1};
+      currentUser = $cookieStore.get('currentUser') || {role: 2};
       // console.log(next, next.access)
       // console.log('current user role is', currentUser)
       if (currentUser === undefined) { debugger; }
