@@ -4,13 +4,15 @@ var schema =  new mongoose.Schema(
   {
     author : String,
     title  : String,
-    country : String,
     month : String,
     year : String,
+    country : String,
     description : String,
-    people : Boolean,
-    nature : Boolean,
-    culture : Boolean,
+    category: {
+        people : Boolean,
+        nature : Boolean,
+        culture : Boolean
+    },
     likes : Number,
     likedUser : Array,
     fileType : String,
