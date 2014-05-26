@@ -22,13 +22,15 @@ app.configure(function() {
     }
   });
 
+  app.use(express.static(path.join(__dirname, '../app')));
   app.use(express.bodyParser({ uploadDir: '../app/photos' }));
+  app.use(express.cookieParser());
   app.use(cors());
-  app.use(app.router);
+  app.use(express.session({ secret: 'keyboard cat' }));
   app.use(passport.initialize());
   // app.use(allowCrossDomain())
   app.use(passport.session());
-  app.use(express.static(path.join(__dirname, '../app')));
+  app.use(app.router);
 
   // app.use(express.cookieParser());
   // app.use(express.cookieSession({

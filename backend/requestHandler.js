@@ -147,7 +147,8 @@ exports.upload = function(req, res) {
       fs.unlink(tmpPath, function() {
         if (err) throw err;
         // console.log("fileType", fileType);
-        res.send({'photoId': photoId, 'fileType': fileType, 'height': photoInfo.height, 'width' : photoInfo.width });
+        console.log('inserted photo info is', insertedPhotoInfo)
+        res.send(insertedPhotoInfo);
       });
     });
   });
@@ -177,9 +178,7 @@ exports.getPhotos = function(req, res){
       var currentPhoto = foundPhotos[i];
       console.log('within getPhotos: currentphoto is - ', currentPhoto);
 
-      var photoInfo = {'photoId': currentPhoto._id, 'fileType': currentPhoto.fileType, 'height': currentPhoto.height, 'width' : currentPhoto.width };
-      console.log('within getPhotos: photoUrl is - ', photoInfo);
-      photoInfos.push(photoInfo);
+      photoInfos.push(currentPhoto);
     }
     console.log('found within getPhotos!', photoInfos);
     res.send(200, photoInfos);
@@ -187,12 +186,13 @@ exports.getPhotos = function(req, res){
 };
 
 exports.getOnePhoto = function(req, res){
+  console.log('req in getOnePhoto is, ', req.body);
   var photoId = req.body.photoId;
   var query = {_id: new Object(photoId)};
 
   Photo.findOne(query, function(err, photo){
     if(err) throw err;
-
+    console.log(photo)
     // var photoInfo = 
     var photoUrl = photo._id + '.' + photo.fileType;
     res.send(200, photo);

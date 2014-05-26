@@ -83,6 +83,7 @@ var authFacebookCallback = function(req, res, next, passport) {
   passport.authenticate('facebook', function(err, user) {
 
     if(err){
+      console.log('err!')
       return next(err);
     }
 
@@ -90,12 +91,16 @@ var authFacebookCallback = function(req, res, next, passport) {
       return res.redirect('/');
     }
 
+    console.log('OAuth93: ', user);
+
     req.login(user, function(err) {
       if(err){
+        console.log('OAuth 97 err!')
         return next(err);
       }
-      res.cookie(JSON.stringify(user));
-      return res.redirect('/#/dash');
+      console.log('OAuth 101: ', JSON.stringify(user))
+      res.cookie('currentUser', JSON.stringify(user));
+      return res.redirect('/#/map');
     });
 
   })(req, res, next);
