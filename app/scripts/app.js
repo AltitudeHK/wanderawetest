@@ -98,6 +98,14 @@ angular
         }
       }
     });
+
+    // For mitigating issue with just having one gallery state
+    // $rootScope.$on('$stateChangeSuccess', function (event, next, currentUser) {
+    //   if(next === 'map'){
+    //     console.log(event, next, currentUser);  
+    //     location.reload();
+    //   }
+    // });
     // $rootScope.$on('invalidSignUp', function(event, message){
     //   alert(message);
     // });

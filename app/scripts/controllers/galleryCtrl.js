@@ -2,6 +2,7 @@
 
 angular.module('wanderaweApp')
   .controller('GalleryCtrl', ['$scope', 'Photo', 'GallerystorageService', function ($scope, Photo, GallerystorageService) {
+    // console.log('gallery controller');
     $scope.pictures = GallerystorageService.photos; // array of objects that look like this: { "photoId": "537acf591ba61f0000f8401d", "fileType": "jpeg", "height": 300, "width": 300 }
 
     $scope.setHeight = function (photoObj) {

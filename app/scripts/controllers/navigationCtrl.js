@@ -31,6 +31,7 @@ angular.module('wanderaweApp')
           console.log('Category:', category);
           console.log('Result is:', photos);
           GallerystorageService.photos = photos;
+          // console.log('setting photos on success')
         });
     };
   }]);
