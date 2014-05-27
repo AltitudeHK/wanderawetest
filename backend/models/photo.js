@@ -14,10 +14,13 @@ var schema =  new mongoose.Schema(
         culture : Boolean
     },
     likes : Number,
-    likedUser : Array,
+    likedUser : {
+        String: Boolean
+    },
     fileType : String,
     height : String,
-    width : String
+    width : String,
+    vote : {type: Number}
   }
 );
       
