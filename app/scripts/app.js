@@ -9,7 +9,6 @@ angular
     'angularFileUpload'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
-
     var access = routingConfig.accessLevels;
 
     $urlRouterProvider
@@ -40,14 +39,8 @@ angular
         controller: 'MapCtrl',
         access: access.anon
       })
-      .state('navigation', {
-        url: '/navigation',
-        templateUrl: 'views/navigation.html',
-        controller: 'NavigationCtrl',
-        access: access.anon
-      })
       .state('profile', {
-        url: '/profile',
+        url: '/profile/:userId',
         templateUrl: 'views/profile.html',
         controller: 'ProfileCtrl',
         access: access.user
@@ -98,6 +91,7 @@ angular
         }
       }
     });
+
     // $rootScope.$on('invalidSignUp', function(event, message){
     //   alert(message);
     // });
