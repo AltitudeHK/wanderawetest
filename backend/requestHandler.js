@@ -7,7 +7,7 @@ var express       = require('express'),
     querystring   = require('querystring'),
     request       = require('request'),
     url           = require('url'),
-    __directory 	= path.join(__dirname, '../app/photos');
+    __directory   = path.join(__dirname, '../app/photos');
 
 var mongoose = require('mongoose');
 var types    = require('mongoose').Types;
@@ -123,6 +123,7 @@ exports.upload = function(req, res) {
 
   Photo.create(newPhoto, function(err, insertedPhotoInfo){
     if (err) throw err;
+    console.log(insertedPhotoInfo);
 
     var photoId = insertedPhotoInfo._id;
 
@@ -149,7 +150,7 @@ exports.upload = function(req, res) {
       fs.unlink(tmpPath, function() {
         if (err) throw err;
         // console.log("fileType", fileType);
-        console.log('inserted photo info is', insertedPhotoInfo)
+        console.log('inserted photo info is', insertedPhotoInfo);
         res.send(insertedPhotoInfo);
       });
     });
@@ -160,7 +161,13 @@ exports.getPhotos = function(req, res){
   console.log('within getPhotos: req.body is - ', req.body);
   
   var query = {};
-  query.category = req.body.category;
+  for (var key in req.body){
+    if(!(key === 'country' && req.body.key !== null)){
+      query[key] = req.body[key];
+    }
+  }
+
+  console.log('within getphotos, query: ', query);
   // for (var key in req.body.category) 
   //   if(!req.body.category[key] == false){
   //     querycategory[key] = req.body[key];
@@ -168,7 +175,7 @@ exports.getPhotos = function(req, res){
   // };
 
   // var category = { 'people': true };
-  console.log('within getPhotos: category is - ', category);
+  // console.log('within getPhotos: category is - ', category);
 
   Photo.find(query, function(err, foundPhotos){
     console.log('foundPhotos', foundPhotos);
@@ -194,8 +201,7 @@ exports.getOnePhoto = function(req, res){
 
   Photo.findOne(query, function(err, photo){
     if(err) throw err;
-    console.log(photo)
-    // var photoInfo = 
+    console.log('within getOnePhoto:', photo);
     var photoUrl = photo._id + '.' + photo.fileType;
     res.send(200, photo);
   });
@@ -206,7 +212,7 @@ exports.getOnePhoto = function(req, res){
 };
 
 exports.voteUp = function(req, res) {
-  console.log(req.body.photoId)
+  console.log(req.body.photoId);
   var photoId = req.body.photoId;
   var userId = req.body.userId;
   var query = { _id: types.ObjectId(photoId) };
@@ -222,7 +228,7 @@ exports.voteUp = function(req, res) {
 
   Photo.findOne(query, function(err, foundPhoto){
     if(err) throw err;
-    console.log(foundPhoto)
+    console.log(foundPhoto);
     console.log('before update, ', foundPhoto.vote, foundPhoto.likedUser[userId]);
     foundPhoto.vote++;
     foundPhoto.likedUser[userId] = true;
@@ -230,8 +236,8 @@ exports.voteUp = function(req, res) {
     foundPhoto.save(function(err, savedPhoto){
       if(err) throw err;
       console.log('after update, ', savedPhoto.vote, savedPhoto.likedUser[userId]);
-    }) 
-  })
+    });
+  });
 };
 
 

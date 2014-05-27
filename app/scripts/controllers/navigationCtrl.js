@@ -20,9 +20,11 @@ angular.module('wanderaweApp')
 
     $scope.sendNavigationInfo = function (category) {
       $scope.resetNavigationInfo();
-      if (category !== 'discover') {
+      if (category === 'discover') {
+        Photo.retrieveAllPhotos({});
+      } else {
         $scope.navigationInfo[category] = true;
+        Photo.retrieveAllPhotos($scope.navigationInfo);
       }
-      Photo.retrieveAllPhotos($scope.navigationInfo);
     };
   }]);
