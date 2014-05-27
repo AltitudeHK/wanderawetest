@@ -10,7 +10,7 @@ var express       = require('express'),
     __directory 	= path.join(__dirname, '../app/photos');
 
 var mongoose = require('mongoose');
-
+var types    = require('mongoose').Types;
 mongoose.connect('mongodb://localhost:27017/wanderful');
 
 var db = mongoose.connection;
@@ -25,16 +25,16 @@ var headers = {
 
 };
 
-exports.authFacebookCallback = function(req, res, next, passport){
-  passport.authenticate('facebook', function (err, user) {
-    if (err) { return next(err); }
-    if (!user) { return res.redirect('/'); }
-    req.login(user, function(err) {
-      if (err) { return next(err); }
-      return res.redirect('/#/dash/loading');
-    });
-  })(req, res, next);
-};
+// exports.authFacebookCallback = function(req, res, next, passport){
+//   passport.authenticate('facebook', function (err, user) {
+//     if (err) { return next(err); }
+//     if (!user) { return res.redirect('/'); }
+//     req.login(user, function(err) {
+//       if (err) { return next(err); }
+//       return res.redirect('/#/dash/loading');
+//     });
+//   })(req, res, next);
+// };
 
 /////////////////////////////////////////////////////////////////////////
 //////////////////////////AUTHENTICATION/////////////////////////////////
@@ -109,6 +109,8 @@ exports.upload = function(req, res) {
       file      = req.files.file,
       fileType  = file.type.slice(6);
 
+  photoInfo.vote = 0;
+
   console.log('within upload: photoInfo is - ', photoInfo);
   console.log('within upload: req.files is', req.files);
 
@@ -157,18 +159,18 @@ exports.upload = function(req, res) {
 exports.getPhotos = function(req, res){
   console.log('within getPhotos: req.body is - ', req.body);
   
-  var category = {};
-
-  for (var key in req.body) {
-    if(!req.body[key] == false){
-      category[key] = req.body[key];
-    }
-  };
+  var query = {};
+  query.category = req.body.category;
+  // for (var key in req.body.category) 
+  //   if(!req.body.category[key] == false){
+  //     querycategory[key] = req.body[key];
+  //   }
+  // };
 
   // var category = { 'people': true };
   console.log('within getPhotos: category is - ', category);
 
-  Photo.find(category, function(err, foundPhotos){
+  Photo.find(query, function(err, foundPhotos){
     console.log('foundPhotos', foundPhotos);
     if(err) throw err;
 
@@ -188,7 +190,7 @@ exports.getPhotos = function(req, res){
 exports.getOnePhoto = function(req, res){
   console.log('req in getOnePhoto is, ', req.body);
   var photoId = req.body.photoId;
-  var query = {_id: new Object(photoId)};
+  var query = {_id: types.ObjectId(photoId)};
 
   Photo.findOne(query, function(err, photo){
     if(err) throw err;
@@ -200,18 +202,37 @@ exports.getOnePhoto = function(req, res){
   // db.collection('photos').findOne({_id: photoID}, function(err, photoFound){
   //  //retrieve the actual photo from __dir/public.phots
   // }
+  // exports.voteUp({body: {photoId: photoId}})
 };
 
 exports.voteUp = function(req, res) {
+  console.log(req.body.photoId)
   var photoId = req.body.photoId;
-  var query = { _id: new ObjectId(photoId) };
-  var update = {
-    $inc: { vote : 1 }
-  };
+  var userId = req.body.userId;
+  var query = { _id: types.ObjectId(photoId) };
+  // var update = {
+  //   $inc: { vote : 1 }
+  //   // $set: { likedUser[userId] : true }
+  // };
 
-  Photo.update(query, update, function(err, dontcare){
+  // Photo.update(query, update, function(err, dontcare){
+  //   if(err) throw err;
+  //   console.log('callback after incrementing vote by 1 : ', dontcare);
+  // });
+
+  Photo.findOne(query, function(err, foundPhoto){
     if(err) throw err;
-    console.log('callback after incrementing vote by 1 : ', dontcare);
-  });
+    console.log(foundPhoto)
+    console.log('before update, ', foundPhoto.vote, foundPhoto.likedUser[userId]);
+    foundPhoto.vote++;
+    foundPhoto.likedUser[userId] = true;
+
+    foundPhoto.save(function(err, savedPhoto){
+      if(err) throw err;
+      console.log('after update, ', savedPhoto.vote, savedPhoto.likedUser[userId]);
+    }) 
+  })
 };
+
+
 
