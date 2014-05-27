@@ -28,7 +28,6 @@ angular.module('wanderaweApp')
       $http
         .post('/getPhotos', navigationInfo)
         .success(function (photos) {
-          // console.log('Successfully sent navigationInfo in NavigationCtrl');
           // console.log('navigationInfo:', navigationInfo);
           // console.log('Result is:', photos);
           GallerystorageService.photos = photos;
