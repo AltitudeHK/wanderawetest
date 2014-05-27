@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .factory('Photo', ['$rootScope', '$http', '$upload', '$state', '$cookieStore', 'GallerystorageService', function Photo($rootScope, $http, $upload, $state, $cookieStore, GallerystorageService) {
+  .factory('photoService', ['$rootScope', '$http', '$upload', '$state', '$cookieStore', 'GallerystorageService', function photoService($rootScope, $http, $upload, $state, $cookieStore, GallerystorageService) {
     var gridHeight = 300; // pixels
 
     var svc = {};

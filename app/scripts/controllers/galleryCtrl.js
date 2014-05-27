@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .controller('GalleryCtrl', ['$scope', 'Photo', 'GallerystorageService', function ($scope, Photo, GallerystorageService) {
+  .controller('GalleryCtrl', ['$scope', 'photoService', 'GallerystorageService', function ($scope, photoService, GallerystorageService) {
     // the line below is for making sure that initial loading of GalleryCtrl will update $scope with pictures
     $scope.pictures = GallerystorageService.photos;
 
@@ -10,6 +10,6 @@ angular.module('wanderaweApp')
     });
 
     $scope.setHeight = function (photoObj) {
-      return Photo.resizePhotoHeight(photoObj) + '%';
+      return photoService.resizePhotoHeight(photoObj) + '%';
     };
   }]);
