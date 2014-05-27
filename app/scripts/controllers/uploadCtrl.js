@@ -2,22 +2,18 @@
 
 angular.module('wanderaweApp')
   .controller('UploadCtrl', ['$scope', 'Photo', 'month', 'year', 'category', function ($scope, Photo, month, year, category) {
-    $scope.photoInfo = {};
-    $scope.months = month;
-    $scope.years = year;
-    $scope.categories = category;
-    $scope.category = {
+    $scope.photoInfo = {
       'culture': false,
       'nature': false,
       'people': false
     };
 
-    $scope.resetPhotoInfo = function () {
-      $scope.photoInfo = {};
-    };
+    $scope.months = month;
+    $scope.years = year;
+    $scope.categories = category;
 
-    $scope.resetCategory = function () {
-      $scope.category = {
+    $scope.resetPhotoInfo = function () {
+      $scope.photoInfo = {
         'culture': false,
         'nature': false,
         'people': false
@@ -26,13 +22,11 @@ angular.module('wanderaweApp')
 
     $scope.submitForm = function (isValid) {
       if (isValid) {
-        $scope.category[$scope.selectedCategory] = true;
-        $scope.photoInfo.category = $scope.category;
+        $scope.photoInfo[$scope.selectedCategory] = true;
         Photo.uploadPhoto($scope.photoInfo, $scope.file);
 
         // reset
         $scope.resetPhotoInfo();
-        $scope.resetCategory();
       }
     };
 
