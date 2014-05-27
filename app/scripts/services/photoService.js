@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .factory('Photo', ['$http', '$upload', '$state', '$cookieStore', function Photo($http, $upload, $state, $cookieStore) {
+  .factory('Photo', ['$rootScope', '$http', '$upload', '$state', '$cookieStore', 'GallerystorageService', function Photo($rootScope, $http, $upload, $state, $cookieStore, GallerystorageService) {
     var gridHeight = 300; // pixels
 
     var svc = {};
@@ -25,7 +25,14 @@ angular.module('wanderaweApp')
 
     svc.retrieveAllPhotos = function (navigationInfo) {
       // console.log($cookieStore.get('currentUser'))
-      return $http.post('/getPhotos', navigationInfo);
+      $http
+        .post('/getPhotos', navigationInfo)
+        .success(function (photos) {
+          // console.log('navigationInfo:', navigationInfo);
+          // console.log('Result is:', photos);
+          GallerystorageService.photos = photos;
+          $rootScope.$broadcast('sentNavigationInfo');
+        });
     };
 
     svc.getPhotoHeight = function (photoObj) {
