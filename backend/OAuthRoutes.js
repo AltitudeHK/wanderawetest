@@ -98,7 +98,8 @@ var authFacebookCallback = function(req, res, next, passport) {
         console.log('OAuth 97 err!')
         return next(err);
       }
-      console.log('OAuth 101: ', JSON.stringify(user))
+      user.role = 2;
+      console.log(user)
       res.cookie('currentUser', JSON.stringify(user));
       return res.redirect('/#/map');
     });
