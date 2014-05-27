@@ -20,6 +20,7 @@ var schema =  new mongoose.Schema(
       name: String,
       email: String
     },
+    role: Number
   }
 );
 
