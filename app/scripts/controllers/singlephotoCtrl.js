@@ -3,8 +3,12 @@
 angular.module('wanderaweApp')
   .controller('SinglephotoCtrl', ['$scope', 'picture', '$window', function ($scope, picture, $window) {
     // picture: { "photoId": "537acf591ba61f0000f8401d", "fileType": "jpeg", "height": 300, "width": 300 }
-    $scope.windowHeight = $window.innerHeight;
-    $scope.windowWidth = $window.innerWidth;
+    
+    // bind on resize event of window
+    angular.element($window).bind('resize', function () {
+      $scope.getFinalDimensions();
+      $scope.$apply();
+    });
 
     $scope.getScalingFactorHeight = function () {
       var windowHeight = $window.innerHeight;
@@ -22,10 +26,10 @@ angular.module('wanderaweApp')
       var finalWidth;
       var finalHeight;
 
-      console.log('windowWidth', $window.innerWidth);
-      console.log('windowHeight', $window.innerHeight);
-      console.log('heightRatio', heightRatio);
-      console.log('widthRatio', widthRatio);
+      // console.log('windowWidth', $window.innerWidth);
+      // console.log('windowHeight', $window.innerHeight);
+      // console.log('heightRatio', heightRatio);
+      // console.log('widthRatio', widthRatio);
 
       if (widthRatio > 1 || heightRatio > 1) {
         if (widthRatio >= heightRatio) {
@@ -40,18 +44,11 @@ angular.module('wanderaweApp')
         finalHeight = parseInt(picture.data.height, 10);
       }
 
+      // finalWidth and finalHeight will be used by singlePhotoCtrl
       $scope.finalWidth = finalWidth;
       $scope.finalHeight = finalHeight;
     };
 
-    console.log('picture is', picture);
-    console.log('window is', $window);
-
     $scope.getFinalDimensions();
     $scope.photoPath = picture.data._id + '.' + picture.data.fileType;
-
-    // $scope.$watch('windowWidth', function (e, a) {
-    //   console.log('hi', e, a);
-    //   $scope.getFinalDimensions();
-    // });
   }]);
