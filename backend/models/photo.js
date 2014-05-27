@@ -8,11 +8,9 @@ var schema =  new mongoose.Schema(
     year : String,
     country : String,
     description : String,
-    category: {
-        people : Boolean,
-        nature : Boolean,
-        culture : Boolean
-    },
+    people : Boolean,
+    nature : Boolean,
+    culture : Boolean,
     likes : Number,
     likedUser : {
         String: Boolean
