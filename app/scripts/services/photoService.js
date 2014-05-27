@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .factory('photoService', ['$rootScope', '$http', '$upload', '$state', '$cookieStore', 'GallerystorageService', function photoService($rootScope, $http, $upload, $state, $cookieStore, GallerystorageService) {
+  .factory('photoService', ['$rootScope', '$http', '$upload', '$state', '$cookieStore', 'gallerystorageService', function photoService($rootScope, $http, $upload, $state, $cookieStore, gallerystorageService) {
     var gridHeight = 300; // pixels
 
     var svc = {};
@@ -30,7 +30,7 @@ angular.module('wanderaweApp')
         .success(function (photos) {
           // console.log('navigationInfo:', navigationInfo);
           // console.log('Result is:', photos);
-          GallerystorageService.photos = photos;
+          gallerystorageService.photos = photos;
           $rootScope.$broadcast('sentNavigationInfo');
         });
     };

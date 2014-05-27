@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .factory('GallerystorageService', function GallerystorageService() {
+  .factory('gallerystorageService', function gallerystorageService() {
     var svc = {};
     svc.photos = [];
     return svc;
