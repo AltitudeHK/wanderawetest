@@ -2,7 +2,7 @@
 
 angular.module('wanderaweApp')
   .factory('photoService', ['$rootScope', '$http', '$upload', '$state', '$cookieStore', 'gallerystorageService', function photoService($rootScope, $http, $upload, $state, $cookieStore, gallerystorageService) {
-    var gridHeight = 300; // pixels
+    // var gridHeight = 400; // pixels
 
     var svc = {};
     svc.uploadPhoto = function (photoInfo, file) {
@@ -37,18 +37,23 @@ angular.module('wanderaweApp')
 
     svc.getPhotoHeight = function (photoObj) {
       // photoObj: { "photoId": "537acf591ba61f0000f8401d", "fileType": "jpeg", "height": 300, "width": 300 }
-      return photoObj.height;
+      return parseInt(photoObj.height, 10);
     };
 
     svc.getPhotoWidth = function (photoObj) {
-      return photoObj.width;
+      return parseInt(photoObj.width, 10);
     };
 
     svc.resizePhotoHeight = function (photoObj) {
-      // check if photoObj height is less than gridHeight
-      // if yes, don't do anything
-      // else, return gridHeight
-      return (photoObj.height > gridHeight) ? (gridHeight / photoObj.height) * 100 : 100;
+      var percent;
+
+      if (svc.getPhotoHeight(photoObj) > gridHeight) {
+        percent = (gridHeight / svc.getPhotoHeight(photoObj)) * 100;
+      } else {
+        percent = 100;
+      }
+      console.log('percent is', percent);
+      return percent;
     };
 
     return svc;
