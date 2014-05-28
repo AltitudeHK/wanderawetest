@@ -14,8 +14,11 @@ angular.module('wanderaweApp')
           file: file
         })
         .success(function(data) {
-          console.log('Successfully uploaded photo:', data);
           $state.go('singlephoto', data);
+        })
+        .error(function(msg) {
+          $state.go('login');
+          alert(msg);
         });
     };
 
