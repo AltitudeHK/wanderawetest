@@ -83,9 +83,9 @@ exports.login = function(req, res){
   var isValid = false;
 
   db.collection('users').findOne({username: userInfo.username}, function(error, found){
-    if (found === null){
+    if (found === null) {
       res.send(200, false);
-    }else if(found.password === userInfo.password){ //FIX LATER need to hash
+    } else if (found.password === userInfo.password) { //FIX LATER need to hash
       res.cookie('currentUser', JSON.stringify({
         username: found.username,
         role: found.role
@@ -96,6 +96,10 @@ exports.login = function(req, res){
   });
 };
 
+exports.logout = function (req, res) {
+  req.session = null;
+  res.send(200);
+};
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////Photos//////////////////////////////////////
@@ -168,14 +172,6 @@ exports.getPhotos = function(req, res){
   }
 
   console.log('within getphotos, query: ', query);
-  // for (var key in req.body.category) 
-  //   if(!req.body.category[key] == false){
-  //     querycategory[key] = req.body[key];
-  //   }
-  // };
-
-  // var category = { 'people': true };
-  // console.log('within getPhotos: category is - ', category);
 
   Photo.find(query, function(err, foundPhotos){
     console.log('foundPhotos', foundPhotos);
