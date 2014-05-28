@@ -43,7 +43,7 @@ module.exports = function(app, passport) {
 
 
     // twitter will send back the token and profile
-    function(token, refreshToken, profile, done) {
+    function(token, tokenSecret, profile, done) {
 
         // asynchronous
         process.nextTick(function() {
@@ -63,11 +63,13 @@ module.exports = function(app, passport) {
                     // if there is no user found with that twitter id, create them
                     var newUser            = new User();
 
+                    console.log(profile)
+
                     // set all of the twitter information in our user model
                     newUser.twitter.id    = profile.id; // set the users twitter id                   
                     newUser.twitter.token = token; // we will save the token that twitter provides to the user                    
-                    newUser.twitter.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-                    newUser.twitter.email = profile.emails[0].value; // twitter can return multiple emails so we'll take the first
+                    newUser.twitter.username  = profile.username; // look at the passport user profile to see how names are returned
+                    newUser.twitter.displayName = profile.displayName; // twitter can return multiple emails so we'll take the first
 
                     // save our user to the database
                     newUser.save(function(err) {
@@ -100,7 +102,7 @@ module.exports = function(app, passport) {
       passport.authenticate('twitter', function(err, user) {
 
         if(err){
-          console.log('err!')
+          console.log('err! ', user)
           return next(err);
         }
 
@@ -108,17 +110,17 @@ module.exports = function(app, passport) {
           return res.redirect('/');
         }
 
-        console.log('OAuth93: ', user);
+        console.log('twitterCallback user: ', user);
 
         req.login(user, function(err) {
           if(err){
-            console.log('OAuth 97 err!')
+            console.log('twitter req.login err!')
             return next(err);
           }
           user.role = 2;
           console.log(user)
           res.cookie('currentUser', JSON.stringify(user));
-          return res.redirect('/#/map');
+          return res.redirect('/');
         });
 
       })(req, res, next);
