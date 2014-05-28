@@ -8,17 +8,16 @@ angular.module('wanderaweApp')
 
     return {
       isAuthorized: function (accessLevel, userRole) {
-        console.log('isauthorised?', accessLevel, userRole, accessLevel <= userRole);
-        if (userRole === 'undefined') {
-          return true;
-          userRole = currentUser.role;
-        }
+        currentUser = $cookieStore.get('currentUser') || { username: '', role: role.public };
+        // console.log("currentUser cookieStore", $cookieStore.get('currentUser'));
+        // console.log('isauthorised?', accessLevel, userRole, accessLevel <= userRole);
         return (accessLevel <= userRole);
       },
 
-      isLoggedIn: function (currentUser) {
-        console.log('islogged in?');
-        return currentUser.role >= role.user;
+      isLoggedIn: function () {
+        currentUser = $cookieStore.get('currentUser') || { username: '', role: role.public };
+        // console.log('islogged in?', currentUser);
+        return (currentUser.role >= role.user);
       }
 
         // signup: function (email, image, username, password) {
