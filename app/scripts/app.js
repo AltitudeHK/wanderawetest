@@ -85,19 +85,9 @@ angular
   .run(['$rootScope', '$state', '$cookieStore', 'userService', function ($rootScope, $state, $cookieStore, userService) {
     $rootScope.$on('$stateChangeStart', function (event, next, currentUser) {
       currentUser = $cookieStore.get('currentUser') || { username: '', role: routingConfig.userRoles.public };
-      
-      if (currentUser.role !== 2) {
-        console.log('upping role for convenience', currentUser);
-        currentUser = {role: 2};
-      }
-      
       if (!userService.isAuthorized(next.access, currentUser.role)) {
         event.preventDefault();
-        if (userService.isLoggedIn()) {
-          $state.go('map');
-        } else {
-          $state.go('map');
-        }
+        $state.go('map');
       }
     });
 
