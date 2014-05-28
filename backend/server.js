@@ -27,6 +27,7 @@ app.configure(function() {
 
 
   app.post('/login', handler.login);
+  app.post('/logout', handler.logout);
   app.post('/signup', handler.signup);
   app.post('/upload', handler.upload);
   app.post('/getPhotos', handler.getPhotos);

@@ -1,8 +1,13 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .controller('NavigationCtrl', ['$scope', '$state', 'photoService', function ($scope, $state, photoService) {
-    $scope.isSignedIn = false; // this should be false but leave true for now
+  .controller('NavigationCtrl', ['$scope', '$state', 'photoService', 'userService', '$cookieStore', function ($scope, $state, photoService, userService, $cookieStore) {
+    $scope.isSignedIn = userService.isLoggedIn($cookieStore.get('currentUser')); // this should be false but leave true for now
+
+    $scope.$on('loggedOut', function (e) {
+      $scope.isSignedIn = userService.isLoggedIn($cookieStore.get('currentUser'));
+      $state.go('map');
+    });
 
     $scope.navigationInfo = {
       'country': null,
