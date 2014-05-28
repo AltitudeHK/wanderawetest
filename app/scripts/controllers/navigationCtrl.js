@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .controller('NavigationCtrl', ['$scope', '$state', 'Photo', function ($scope, $state, Photo) {
+  .controller('NavigationCtrl', ['$scope', '$state', 'photoService', function ($scope, $state, photoService) {
     $scope.isSignedIn = false; // this should be false but leave true for now
 
     $scope.navigationInfo = {
@@ -21,10 +21,10 @@ angular.module('wanderaweApp')
     $scope.sendNavigationInfo = function (category) {
       $scope.resetNavigationInfo();
       if (category === 'discover') {
-        Photo.retrieveAllPhotos({});
+        photoService.retrieveAllPhotos({});
       } else {
         $scope.navigationInfo[category] = true;
-        Photo.retrieveAllPhotos($scope.navigationInfo);
+        photoService.retrieveAllPhotos($scope.navigationInfo);
       }
     };
   }]);

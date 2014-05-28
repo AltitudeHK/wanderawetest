@@ -56,9 +56,9 @@ angular
         templateUrl: 'views/singlephoto.html',
         controller: 'SinglephotoCtrl',
         resolve: {
-          picture: ['$stateParams', 'Photo', function ($stateParams, Photo) {
+          picture: ['$stateParams', 'photoService', function ($stateParams, photoService) {
             console.log('stateParams.photoId is:', $stateParams._id);
-            return Photo
+            return photoService
               .retrieveOnePhoto($stateParams._id)
               .success(function (data) {
                 console.log('Successfully reached single photo page', data);

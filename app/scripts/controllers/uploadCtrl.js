@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wanderaweApp')
-  .controller('UploadCtrl', ['$scope', 'Photo', 'month', 'year', 'category', function ($scope, Photo, month, year, category) {
+  .controller('UploadCtrl', ['$scope', 'photoService', 'month', 'year', 'category', function ($scope, photoService, month, year, category) {
     $scope.photoInfo = {
       'culture': false,
       'nature': false,
@@ -23,7 +23,7 @@ angular.module('wanderaweApp')
     $scope.submitForm = function (isValid) {
       if (isValid) {
         $scope.photoInfo[$scope.selectedCategory] = true;
-        Photo.uploadPhoto($scope.photoInfo, $scope.file);
+        photoService.uploadPhoto($scope.photoInfo, $scope.file);
 
         // reset
         $scope.resetPhotoInfo();
