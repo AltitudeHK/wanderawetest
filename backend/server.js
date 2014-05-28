@@ -7,24 +7,12 @@ var express  = require('express'),
     passport = require('passport'),
     app      = express();
 
-require('./passport')(passport);
 
 app.configure(function() {
-  app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Origin', req.headers.origin);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-    if ('OPTIONS' == req.method) {
-      res.send(200);
-    } else {
-      next();
-    }
-  });
 
   app.use(express.static(path.join(__dirname, '../app')));
-  app.use(express.bodyParser({ uploadDir: '../app/photos' }));
   app.use(express.cookieParser());
+  app.use(express.bodyParser({ uploadDir: '../app/photos' }));
   app.use(cors());
   app.use(express.session({ secret: 'keyboard cat' }));
   app.use(passport.initialize());
@@ -49,5 +37,6 @@ app.configure(function() {
 });
 
 
-require('./OAuthRoutes')(app, passport);
-
+// require('./OAuthRoutes')(app, passport);
+require('./facebookPassport')(app, passport);
+require('./twitterPassport')(app, passport);
