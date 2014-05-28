@@ -117,7 +117,7 @@ module.exports = function(app, passport) {
           user.role = 2;
           console.log(user)
           res.cookie('currentUser', JSON.stringify(user));
-          return res.redirect('/#/map');
+          return res.redirect('/');
         });
 
       })(req, res, next);

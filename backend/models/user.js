@@ -17,8 +17,8 @@ var schema =  new mongoose.Schema(
     twitter: {
       id: String,
       token: String,
-      name: String,
-      email: String
+      username: String,
+      displayName: String
     },
     role: Number
   }
