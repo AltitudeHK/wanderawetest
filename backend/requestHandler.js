@@ -11,7 +11,7 @@ var express       = require('express'),
 
 var mongoose = require('mongoose');
 var types    = require('mongoose').Types;
-mongoose.connect('mongodb://localhost:27017/wanderful');
+mongoose.connect('mongodb://heroku_app25780390:120kjua65sovmgc0bbav1r3p0h@ds033629.mongolab.com:33629/heroku_app25780390');
 
 var db = mongoose.connection;
 
