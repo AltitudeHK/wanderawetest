@@ -42,6 +42,17 @@ var headers = {
 
 var User = require('./models/user');
 
+//////////////////////////////middleWare/////////////////////////////////
+exports.isLoggedIn = function(req, res, next){
+  if (!req.user){
+    res.redirect('/');
+    res.send(500, { error: 'please log in!' });
+    res.end();
+  } else{
+    return next();
+  }
+};
+
 ////////////////////////////// local ////////////////////////////////////
 
 exports.signup = function(req, res){
@@ -97,8 +108,9 @@ exports.login = function(req, res){
 };
 
 exports.logout = function (req, res) {
+  req.logout();
   req.session = null;
-  res.send(200);
+  res.send(200, 'logged out!');
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -115,19 +127,14 @@ exports.upload = function(req, res) {
 
   photoInfo.vote = 0;
 
-  console.log('within upload: photoInfo is - ', photoInfo);
-  console.log('within upload: req.files is', req.files);
 
   //attaching the fileType to photoInfo because fileType is part of req.files, not part of req.body
   photoInfo.fileType = fileType;
   
   var newPhoto = new Photo(photoInfo);
 
-  console.log('newPhoto is', newPhoto);
-
   Photo.create(newPhoto, function(err, insertedPhotoInfo){
     if (err) throw err;
-    console.log(insertedPhotoInfo);
 
     var photoId = insertedPhotoInfo._id;
 
@@ -153,8 +160,6 @@ exports.upload = function(req, res) {
       // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
       fs.unlink(tmpPath, function() {
         if (err) throw err;
-        // console.log("fileType", fileType);
-        console.log('inserted photo info is', insertedPhotoInfo);
         res.send(insertedPhotoInfo);
       });
     });
@@ -162,8 +167,7 @@ exports.upload = function(req, res) {
 };
 
 exports.getPhotos = function(req, res){
-  console.log('within getPhotos: req.body is - ', req.body);
-  
+
   var query = {};
   for (var key in req.body){
     if(!(key === 'country' && req.body.key !== null)){
@@ -171,67 +175,45 @@ exports.getPhotos = function(req, res){
     }
   }
 
-  console.log('within getphotos, query: ', query);
-
   Photo.find(query, function(err, foundPhotos){
-    console.log('foundPhotos', foundPhotos);
+    
     if(err) throw err;
 
     var photoInfos = [];
 
     for (var i = 0; i < foundPhotos.length; i++) {
       var currentPhoto = foundPhotos[i];
-      console.log('within getPhotos: currentphoto is - ', currentPhoto);
-
       photoInfos.push(currentPhoto);
     }
-    console.log('found within getPhotos!', photoInfos);
+
     res.send(200, photoInfos);
   });
 };
 
 exports.getOnePhoto = function(req, res){
-  console.log('req in getOnePhoto is, ', req.body);
   var photoId = req.body.photoId;
   var query = {_id: types.ObjectId(photoId)};
 
   Photo.findOne(query, function(err, photo){
     if(err) throw err;
-    console.log('within getOnePhoto:', photo);
-    var photoUrl = photo._id + '.' + photo.fileType;
     res.send(200, photo);
   });
-  // db.collection('photos').findOne({_id: photoID}, function(err, photoFound){
-  //  //retrieve the actual photo from __dir/public.phots
-  // }
-  // exports.voteUp({body: {photoId: photoId}})
 };
 
 exports.voteUp = function(req, res) {
-  console.log(req.body.photoId);
   var photoId = req.body.photoId;
   var userId = req.body.userId;
   var query = { _id: types.ObjectId(photoId) };
-  // var update = {
-  //   $inc: { vote : 1 }
-  //   // $set: { likedUser[userId] : true }
-  // };
-
-  // Photo.update(query, update, function(err, dontcare){
-  //   if(err) throw err;
-  //   console.log('callback after incrementing vote by 1 : ', dontcare);
-  // });
 
   Photo.findOne(query, function(err, foundPhoto){
     if(err) throw err;
-    console.log(foundPhoto);
-    console.log('before update, ', foundPhoto.vote, foundPhoto.likedUser[userId]);
     foundPhoto.vote++;
     foundPhoto.likedUser[userId] = true;
 
     foundPhoto.save(function(err, savedPhoto){
       if(err) throw err;
-      console.log('after update, ', savedPhoto.vote, savedPhoto.likedUser[userId]);
+      console.log('before vote, ', foundPhoto.vote, ', after vote, ', savedPhoto);
+
     });
   });
 };
