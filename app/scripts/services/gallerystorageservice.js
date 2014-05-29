@@ -5,4 +5,5 @@ angular.module('wanderaweApp')
     var svc = {};
     svc.photos = [];
     return svc;
+    var hi;
   });
