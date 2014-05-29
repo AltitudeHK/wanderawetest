@@ -32,8 +32,8 @@ app.configure(function() {
   app.post('/getOnePhoto', handler.getOnePhoto);
   app.post('/vote', handler.isLoggedIn, handler.voteUp);
   
-  app.listen(8080);
-  console.log('Listening on port 8080');
+  app.listen(process.env.PORT || 5000);
+  console.log('Listening on port ', process.env.PORT, ' or 5000');
 });
 
 
