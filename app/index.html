@@ -24,55 +24,18 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="header">
+    <div class="header" ng-controller="NavigationCtrl">
+      <ng-include src="isSignedIn ? 'views/signed_in.html' : 'views/not_signed_in.html'"></ng-include>
       <ul class="nav nav-pills pull-right">
-        <li><a ui-sref="gallery">Discover</a></li>
-        <li><a ui-sref="gallery">Nature</a></li>
-        <li><a ui-sref="gallery">Culture</a></li>
-        <li><a ui-sref="gallery">People</a></li>
-        <li><a ui-sref="signup">Signup</a></li>
-        <li><a ui-sref="login">Login</a></li>
-        <li><a ui-sref="profile">Profile</a></li>
-        <li><a ui-sref="upload">Upload</a></li>
-        <!-- <li><a ui-sref="upload" data-toggle="modal" data-target="#myModal">Upload</a></li> -->
+        <li><a ui-sref="gallery" ng-click="sendNavigationInfo('discover')">Discover</a></li>
+        <li><a ui-sref="gallery" ng-click="sendNavigationInfo('culture')">Culture</a></li>
+        <li><a ui-sref="gallery" ng-click="sendNavigationInfo('nature')">Nature</a></li>
+        <li><a ui-sref="gallery" ng-click="sendNavigationInfo('people')">People</a></li>
       </ul>
       <h3 class="text-muted"><a ui-sref="map">wanderawe</a></h3>
-
-      <!-- Modal -->
-<!--       <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-
-            <div class="modal-body" ng-controller="UploadCtrl">
-              <form ng-submit="save()">
-                <label>Title</label><input type="text" ng-model="title"><br>
-                <label>Country</label><input type="text" ng-model="country"><br>
-                <label>Month</label><input type="text" ng-model="month"><br>
-                <label>Year</label><input type="text" ng-model="year"><br>
-                <label>Description</label><textarea rows="2" cols="50" ng-model="description"></textarea><br>
-
-                <input type="file" ng-file-select="onFileSelect($files)">
-                <input type="submit">
-                <button ng-click="upload.abort()">Cancel Upload</button>
-              </form>
-            </div>
-
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div> <!-- header -->
 
-    <div class="container">
-        <div ui-view></div>
-    </div>
+    <div ui-view></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -94,6 +57,10 @@
     <!-- use html5-shim.js instead if you just support HTML5 browsers and you need progress event-->
     <!-- Note: shim.js MUST BE PLACED BEFORE angular.js and angular-file-upload.js AFTER angular.js-->
 
+    <!-- remove angular route -->
+    <!-- remove lodash -->
+    <!-- convert angular-ui-router to bower component -->
+
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -105,22 +72,33 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
     <script src="bower_components/ng-file-upload-shim/angular-file-upload-shim.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
+    <script src="bower_components/topojson/topojson.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
         <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/map.js"></script>
-        <script src="scripts/controllers/about.js"></script>
-        <script src="scripts/controllers/singlephoto.js"></script>
-        <script src="scripts/controllers/gallery.js"></script>
-        <script src="scripts/controllers/navigation.js"></script>
-        <script src="scripts/controllers/profile.js"></script>
-        <script src="scripts/controllers/signup.js"></script>
-        <script src="scripts/controllers/login.js"></script>
-        <script src="scripts/controllers/upload.js"></script>
+        <script src="scripts/routingConfig.js"></script>
+        <script src="scripts/controllers/mapCtrl.js"></script>
+        <script src="scripts/controllers/aboutCtrl.js"></script>
+        <script src="scripts/controllers/singlephotoCtrl.js"></script>
+        <script src="scripts/controllers/galleryCtrl.js"></script>
+        <script src="scripts/controllers/navigationCtrl.js"></script>
+        <script src="scripts/controllers/profileCtrl.js"></script>
+        <script src="scripts/controllers/signupCtrl.js"></script>
+        <script src="scripts/controllers/loginCtrl.js"></script>
+        <script src="scripts/controllers/logoutCtrl.js"></script>
+        <script src="scripts/controllers/uploadCtrl.js"></script>
+        <script src="scripts/services/photoService.js"></script>
+        <script src="scripts/services/monthService.js"></script>
+        <script src="scripts/services/yearService.js"></script>
+        <script src="scripts/services/gallerystorageService.js"></script>
+        <script src="scripts/services/userService.js"></script>
+        <script src="scripts/services/categoryService.js"></script>
+        <script src="scripts/services/resizeService.js"></script>
         <!-- endbuild -->
 </body>
 </html>
