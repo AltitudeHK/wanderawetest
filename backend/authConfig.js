@@ -3,7 +3,7 @@ module.exports = {
   'facebook' : {
     'clientID'      : process.env.FACEBOOK_KEY,
     'clientSecret'  : process.env.FACEBOOK_SECRET,
-    'callbackURL'   : 'http://localhost:8080/auth/facebook/callback'
+    'callbackURL'   : 'http://morning-castle-7568.herokuapp.com/'
   },
 
   'twitter' : {
