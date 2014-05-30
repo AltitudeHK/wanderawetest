@@ -85,7 +85,7 @@ module.exports = function(app, passport) {
     
     /////////////////////////////routing//////////////////////////////////////////////
     
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+    app.get('/auth/facebook', passport.authenticate('facebook'));
 
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
@@ -104,18 +104,14 @@ module.exports = function(app, passport) {
         }
 
         if(!user){
-          return res.redirect('/');
+          return res.redirect('/login');
         }
-
-        console.log('OAuth93: ', user);
 
         req.login(user, function(err) {
           if(err){
-            console.log('OAuth 97 err!')
             return next(err);
           }
           user.role = 2;
-          console.log(user)
           res.cookie('currentUser', JSON.stringify(user));
           return res.redirect('/');
         });
