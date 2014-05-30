@@ -5,4 +5,4 @@ dist
 .sass-cache
 app/bower_components
 app/photos/
-backend/authConfig
+backend/authConfig.js
