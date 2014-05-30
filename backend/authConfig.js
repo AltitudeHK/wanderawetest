@@ -1,13 +1,13 @@
 module.exports = {
 
   'facebook' : {
-    'clientID'    : 'your-consumer-key-here',
-    'clientSecret'  : 'your-client-secret-here',
+    'clientID'      : process.env.FACEBOOK_KEY,
+    'clientSecret'  : process.env.FACEBOOK_SECRET,
     'callbackURL'   : 'http://localhost:8080/auth/facebook/callback'
   },
 
   'twitter' : {
-    'consumerKey'     : 'your-consumer-key-here',
+    'consumerKey'     : 'your-secret-clientID-here',
     'consumerSecret'  : 'your-client-secret-here',
     'callbackURL'     : 'http://localhost:8080/auth/twitter/callback'
   },
