@@ -22,7 +22,7 @@ app.configure(function() {
   // app.use(express.cookieSession({
   //   secret: ''
   // }));
-
+  console.log(process.env.FACEBOOK_KEY);
 
   app.post('/login', handler.login);
   app.post('/logout', handler.logout);
